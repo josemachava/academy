@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-h(3(j+7ij%j#$0$+blt#@wfi!hvz1$zz5trqbb0n!jtph)5k1e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*", "acdemy-jwbher2.onwolke.app"]
 
 
 # Application definition
