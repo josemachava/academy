@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root { --bg:#f5f2ec; --ink:#1a1714; --muted:#7a7470; --accent:#c8512a; --border:#e0dbd3; --success:#2e7d5e; }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+
+    /* Flash messages */
+    .messages { position:fixed; top:1.5rem; right:1.5rem; z-index:999; display:flex; flex-direction:column; gap:0.6rem; max-width:340px; }
+    .message {
+      padding:0.75rem 1.1rem; font-size:0.875rem; border-left:3px solid;
+      background:#fff; box-shadow:0 4px 16px rgba(0,0,0,0.1);
+      animation:slideIn 0.3s ease both; display:flex; align-items:center; gap:0.75rem; transition:opacity 0.4s;
+    }
+    @keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+    .message.success { border-color:var(--success); color:var(--success); }
+    .message.info    { border-color:var(--accent);  color:var(--accent); }
+    .message .close  { margin-left:auto; cursor:pointer; opacity:0.5; background:none; border:none; font-size:1rem; }
+    .message .close:hover { opacity:1; }
+
+    header {
+      background:#fff; border-bottom:1px solid var(--border);
+      padding:1rem 2.5rem; display:flex; align-items:center; justify-content:space-between;
+    }
+    .wordmark { font-family:'Fraunces',serif; font-weight:600; font-size:1.3rem; letter-spacing:-0.02em; }
+    .wordmark span { color:var(--accent); }
+    .nav-right { display:flex; align-items:center; gap:1.5rem; }
+    .user-pill {
+      display:flex; align-items:center; gap:0.6rem;
+      font-size:0.875rem; color:var(--muted);
+    }
+    .avatar {
+      width:32px; height:32px; border-radius:50%;
+      background:var(--ink); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Fraunces',serif; font-size:0.85rem; font-weight:600;
+    }
+    .logout {
+      font-size:0.8rem; font-weight:500; letter-spacing:0.05em;
+      text-transform:uppercase; color:var(--ink); text-decoration:none;
+      padding:0.45rem 1rem; border:1px solid var(--border); transition:border-color 0.15s,color 0.15s;
+    }
+    .logout:hover { border-color:var(--accent); color:var(--accent); }
+
+    main { max-width:720px; margin:4rem auto; padding:0 2rem; animation:rise 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes rise { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+    .greeting { font-family:'Fraunces',serif; font-weight:300; font-size:2.6rem; letter-spacing:-0.03em; line-height:1.1; margin-bottom:0.5rem; }
+    .greeting em { font-style:italic; color:var(--accent); }
+    .sub { color:var(--muted); font-size:0.95rem; margin-bottom:3rem; }
+
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+
+    .card { background:#fff; border:1px solid var(--border); padding:1.75rem 2rem; }
+    .card h2 { font-family:'Fraunces',serif; font-weight:400; font-size:1.05rem; margin-bottom:1.2rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border); }
+
+    .info-row { display:flex; flex-direction:column; gap:0.15rem; padding:0.55rem 0; border-bottom:1px solid var(--border); }
+    .info-row:last-child { border-bottom:none; }
+    .info-label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+    .info-value { font-size:0.92rem; }
+
+    .badge {
+      display:inline-block; font-size:0.72rem; letter-spacing:0.05em; text-transform:uppercase;
+      padding:0.2rem 0.55rem; border-radius:2px; font-weight:500;
+    }
+    .badge.active { background:rgba(46,125,94,0.1); color:var(--success); }
+  </style>
+</head>
+<body>
+
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <div class="message {{ message.tags }}">
+      {{ message }}
+      <button class="close" onclick="this.parentElement.remove()">✕</button>
+    </div>
+    {% endfor %}
+  </div>
+  <script>
+    document.querySelectorAll('.message').forEach(el => {
+      setTimeout(() => { el.style.opacity='0'; }, 4000);
+      setTimeout(() => el.remove(), 4400);
+    });
+  </script>
+  {% endif %}
+
+  <header>
+    <div class="wordmark">Auth<span>.</span></div>
+    <div class="nav-right">
+      <div class="user-pill">
+        <div class="avatar">{{ user.first_name.0 }}{{ user.last_name.0 }}</div>
+        {{ user.get_full_name }}
+      </div>
+      <a class="logout" href="{% url 'logout' %}">Sign out</a>
+    </div>
+  </header>
+
+  <main>
+    <p class="greeting">Hello, <em>{{ user.first_name }}</em>.</p>
+    <p class="sub">You're signed in. Here's your account overview.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Profile</h2>
+        <div class="info-row"><div class="info-label">First name</div><div class="info-value">{{ user.first_name }}</div></div>
+        <div class="info-row"><div class="info-label">Surname</div><div class="info-value">{{ user.last_name }}</div></div>
+        <div class="info-row"><div class="info-label">Email</div><div class="info-value">{{ user.email }}</div></div>
+      </div>
+      <div class="card">
+        <h2>Account</h2>
+        <div class="info-row"><div class="info-label">Status</div><div class="info-value"><span class="badge active">Active</span></div></div>
+        <div class="info-row"><div class="info-label">Member since</div><div class="info-value">{{ user.date_joined|date:"F j, Y" }}</div></div>
+        <div class="info-row"><div class="info-label">Last login</div><div class="info-value">{{ user.last_login|date:"F j, Y · H:i" }}</div></div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

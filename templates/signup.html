@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Create Account{% endblock %}
+{% block content %}
+  <h1 class="card-title">Create account.</h1>
+  <p class="card-sub">Fill in the details below to get started.</p>
+
+  {% if form.non_field_errors %}
+    <div class="form-errors">{% for e in form.non_field_errors %}{{ e }}{% endfor %}</div>
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="row">
+      <div class="field">
+        <label for="id_first_name">First name</label>
+        <input type="text" name="first_name" id="id_first_name" value="{{ form.first_name.value|default:'' }}" placeholder="João" autocomplete="given-name" />
+        {% if form.first_name.errors %}<div class="errors">{{ form.first_name.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="field">
+        <label for="id_last_name">Surname</label>
+        <input type="text" name="last_name" id="id_last_name" value="{{ form.last_name.value|default:'' }}" placeholder="Silva" autocomplete="family-name" />
+        {% if form.last_name.errors %}<div class="errors">{{ form.last_name.errors.0 }}</div>{% endif %}
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="id_email">Email</label>
+      <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" placeholder="you@example.com" autocomplete="email" />
+      {% if form.email.errors %}<div class="errors">{{ form.email.errors.0 }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="id_password">Password</label>
+      <input type="password" name="password" id="id_password" placeholder="••••••••" autocomplete="new-password" oninput="checkStrength(this.value)" />
+      {% if form.password.errors %}<div class="errors">{{ form.password.errors.0 }}</div>{% endif %}
+      <div class="strength-wrap">
+        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="id_password_confirm">Repeat password</label>
+      <input type="password" name="password_confirm" id="id_password_confirm" placeholder="••••••••" autocomplete="new-password" />
+      {% if form.password_confirm.errors %}<div class="errors">{{ form.password_confirm.errors.0 }}</div>{% endif %}
+    </div>
+
+    <button class="btn" type="submit">Create Account</button>
+  </form>
+
+  <div class="card-footer">
+    Already have an account? <a href="{% url 'login' %}">Sign in</a>
+  </div>
+
+  <script>
+    function checkStrength(pw) {
+      const fill  = document.getElementById('strength-fill');
+      const label = document.getElementById('strength-label');
+      let score = 0;
+      if (pw.length >= 8)  score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+      const levels = [
+        { pct: '0%',   color: 'transparent', text: '' },
+        { pct: '30%',  color: '#c0392b',      text: 'Weak' },
+        { pct: '55%',  color: '#e67e22',      text: 'Fair' },
+        { pct: '80%',  color: '#f1c40f',      text: 'Good' },
+        { pct: '100%', color: '#2e7d5e',      text: 'Strong' },
+      ];
+
+      const lvl = pw.length === 0 ? levels[0] : levels[score] || levels[1];
+      fill.style.width      = lvl.pct;
+      fill.style.background = lvl.color;
+      label.textContent     = lvl.text;
+      label.style.color     = lvl.color;
+    }
+  </script>
+{% endblock %}
