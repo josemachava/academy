@@ -36,7 +36,6 @@ ALLOWED_HOSTS = ["*",
 
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "acdemy-jwbher2.onwolke.app",
     'https://*.onwolke.app',
     'https://acdemy-jwbher2.onwolke.app',
     'https://www.academy.co.mz',
