@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,7 +108,8 @@
   {% endif %}
 
   <div>
-    <a class="wordmark" href="/">Auth<span>.</span></a>
+    <a class="wordmark" href="/"><img src="{% static 'images/logo.png' %}" style="width: 200px" alt="Logo"></a>
+
     <div class="card">{% block content %}{% endblock %}</div>
   </div>
 </body>
