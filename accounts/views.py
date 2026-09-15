@@ -12,7 +12,7 @@ def signup_view(request):
     if request.method == "POST" and form.is_valid():
         user = form.save()
         login(request, user)
-        messages.success(request, f"Welcome, {user.first_name}! Your account has been created.")
+        messages.success(request, f"Bem-vindo, {user.first_name}! A sua conta foi criada.")
         return redirect("dashboard")
     return render(request, "signup.html", {"form": form})
 
@@ -27,13 +27,13 @@ def login_view(request):
         login(request, user)
         if not remember:
             request.session.set_expiry(0)  # session expires on browser close
-        messages.success(request, f"Welcome back, {user.first_name}!")
+        messages.success(request, f"Bem-vindo de volta, {user.first_name}!")
         return redirect("dashboard")
     return render(request, "login.html", {"form": form})
 
 
 def logout_view(request):
-    messages.info(request, "You've been signed out.")
+    messages.info(request, "Sessão terminada.")
     logout(request)
     return redirect("login")
 

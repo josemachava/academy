@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Sign In{% endblock %}
+{% block title %}Iniciar sessão{% endblock %}
 {% block content %}
-  <h1 class="card-title">Welcome back.</h1>
-  <p class="card-sub">Sign in to your account to continue.</p>
+  <h1 class="card-title">Bem-vindo de volta</h1>
+  <p class="card-sub">Inicie sessão na sua conta para continuar.</p>
 
   {% if form.non_field_errors %}
     <div class="form-errors">{% for e in form.non_field_errors %}{{ e }}{% endfor %}</div>
@@ -11,25 +11,28 @@
   <form method="post" novalidate>
     {% csrf_token %}
     <div class="field">
-      <label for="id_email">Email</label>
-      <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" placeholder="you@example.com" autocomplete="email" />
+      <label for="id_email">Endereço de e-mail <span class="req">*</span></label>
+      <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" placeholder="joao@exemplo.com" autocomplete="email" />
       {% if form.email.errors %}<div class="errors">{{ form.email.errors.0 }}</div>{% endif %}
     </div>
+
     <div class="field">
-      <label for="id_password">Password</label>
-      <input type="password" name="password" id="id_password" placeholder="••••••••" autocomplete="current-password" />
+      <label for="id_password">Palavra-passe <span class="req">*</span></label>
+      <input type="password" name="password" id="id_password" placeholder="Introduza a sua palavra-passe" autocomplete="current-password" />
       {% if form.password.errors %}<div class="errors">{{ form.password.errors.0 }}</div>{% endif %}
     </div>
 
-    <div class="check-field">
-      <input type="checkbox" name="remember_me" id="id_remember_me" {% if form.remember_me.value %}checked{% endif %} />
-      <label for="id_remember_me">Remember me</label>
+    <div class="check-row">
+      <div class="check-field">
+        <input type="checkbox" name="remember_me" id="id_remember_me" {% if form.remember_me.value %}checked{% endif %} />
+        <label for="id_remember_me">Lembrar-me</label>
+      </div>
     </div>
 
-    <button class="btn" type="submit">Sign In</button>
+    <button class="btn" type="submit">Entrar</button>
   </form>
 
   <div class="card-footer">
-    Don't have an account? <a href="{% url 'signup' %}">Create one</a>
+    Não tem uma conta? <a href="{% url 'signup' %}">Criar conta</a>
   </div>
 {% endblock %}
