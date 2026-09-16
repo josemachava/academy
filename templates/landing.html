@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academy — Garante o teu futuro aprendendo online</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1e1445; --navy-deep: #150e33; --purple: #7c3aed; --purple-dark: #6d28d9;
+      --ink: #141414; --muted: #6b7280; --bg: #f4f2ec; --border: #e5e7eb;
+    }
+    body { font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* nav */
+    .nav { border-bottom: 1px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 50; }
+    .nav-inner { max-width: 1120px; margin: 0 auto; padding: 0.7rem 1.5rem; display: flex; align-items: center; gap: 2rem; }
+    .nav img { height: 30px; }
+    .nav-links { display: flex; gap: 1.6rem; margin-left: 1rem; }
+    .nav-links a { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; color: var(--ink); text-decoration: none; }
+    .nav-links a:hover { color: var(--purple); }
+    .nav-right { margin-left: auto; display: flex; align-items: center; gap: 1rem; }
+    .nav-login { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; color: var(--ink); text-decoration: none; }
+    .btn-outline { font-size: 0.72rem; font-weight: 700; color: var(--purple); border: 1px solid var(--purple); border-radius: 3px; padding: 0.45rem 1.1rem; text-decoration: none; }
+    .btn-outline:hover { background: var(--purple); color: #fff; }
+
+    /* hero */
+    .hero { background: var(--bg); padding: 4.5rem 0 4rem; }
+    .hero h1 { font-size: 2.1rem; font-weight: 900; letter-spacing: -0.01em; line-height: 1.25; color: var(--navy); max-width: 640px; }
+    .hero p { margin-top: 0.9rem; font-size: 0.85rem; color: var(--muted); max-width: 460px; line-height: 1.6; }
+    .btn-solid { display: inline-block; margin-top: 1.4rem; background: #fff; color: var(--purple); border: 1px solid var(--purple); font-size: 0.75rem; font-weight: 700; border-radius: 3px; padding: 0.6rem 1.4rem; text-decoration: none; }
+    .btn-solid:hover { background: var(--purple); color: #fff; }
+
+    /* tech band */
+    .band { background: var(--navy); color: #fff; padding: 2.6rem 0; }
+    .band-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; align-items: center; }
+    .band h2 { font-size: 0.95rem; font-weight: 800; line-height: 1.5; }
+    .band-logos { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; }
+    .band-logos span { opacity: 0.95; }
+    .band p { font-size: 0.75rem; line-height: 1.7; color: #c9c3e3; }
+
+    /* courses */
+    .courses { padding: 3.5rem 0 3rem; }
+    .courses h2 { font-size: 0.95rem; font-weight: 600; margin-bottom: 1.4rem; }
+    .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem 1.6rem; }
+    .course-grid a { border: 1px solid var(--purple); color: var(--ink); text-align: center; font-size: 0.8rem; font-weight: 600; padding: 0.85rem; text-decoration: none; border-radius: 2px; }
+    .course-grid a:hover { background: var(--purple); color: #fff; }
+    .explore { display: block; text-align: right; margin-top: 1rem; font-size: 0.75rem; color: var(--muted); text-decoration: none; }
+    .explore:hover { color: var(--purple); }
+
+    /* careers / newsletter */
+    .careers { text-align: center; padding: 2.5rem 0 3.5rem; position: relative; overflow: hidden; }
+    .careers h2 { color: var(--navy); font-size: 0.95rem; font-weight: 800; line-height: 1.6; }
+    .careers p { font-size: 0.72rem; color: var(--muted); margin: 0.4rem 0 1.2rem; }
+    .news-form { display: flex; gap: 0; justify-content: center; max-width: 420px; margin: 0 auto; }
+    .news-form input { flex: 1; border: 1px solid var(--purple); border-right: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; font-family: inherit; outline: none; border-radius: 2px 0 0 2px; }
+    .news-form button { background: var(--navy); color: #fff; border: 1px solid var(--navy); font-size: 0.72rem; font-weight: 700; padding: 0 1.2rem; cursor: pointer; border-radius: 0 2px 2px 0; font-family: inherit; }
+    .news-form button:hover { background: var(--purple); border-color: var(--purple); }
+    .confetti { position: absolute; font-size: 0.8rem; opacity: 0.9; pointer-events: none; }
+    .flash { max-width: 420px; margin: 0 auto 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; font-size: 0.82rem; border-radius: 6px; padding: 0.6rem 1rem; }
+
+    /* footer */
+    footer { background: var(--navy-deep); color: #c9c3e3; padding: 2.5rem 0 1.2rem; font-size: 0.75rem; }
+    .foot-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+    .foot-grid h4 { color: #fff; font-size: 0.75rem; margin-bottom: 0.7rem; }
+    .foot-grid a { display: block; color: #c9c3e3; text-decoration: none; margin-bottom: 0.4rem; }
+    .foot-grid a:hover { color: #fff; }
+    .social { display: flex; gap: 0.5rem; margin-top: 1.2rem; }
+    .social a { width: 26px; height: 26px; border-radius: 4px; background: #2c2160; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; margin: 0; }
+    .copy { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c2160; margin-top: 1.5rem; padding-top: 1rem; font-size: 0.7rem; }
+
+    @media (max-width: 760px) {
+      .nav-links { display: none; }
+      .hero h1 { font-size: 1.5rem; }
+      .band-grid, .course-grid, .foot-grid { grid-template-columns: 1fr; }
+      .hero { padding: 3rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="{% url 'landing' %}"><img src="{% static 'images/logo.png' %}" alt="Academy"></a>
+      <div class="nav-links">
+        <a href="{% url 'landing' %}">CURSOS</a>
+        <a href="{% url 'landing' %}">PROGRAMAS</a>
+        <a href="{% url 'landing' %}">COMUNIDADE</a>
+      </div>
+      <div class="nav-right">
+        {% if user.is_authenticated %}
+        <a class="nav-login" href="{% url 'landing' %}">OS MEUS CURSOS</a>
+        <a class="btn-outline" href="{% url 'landing' %}">Abrir painel</a>
+        {% else %}
+        <a class="nav-login" href="{% url 'login' %}">ENTRAR</a>
+        <a class="btn-outline" href="{% url 'signup' %}">Criar conta</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="wrap">
+      <h1>GARANTE SEU FUTURO APRENDENDO NOVAS HABILIDADES ONLINE.</h1>
+      <p>Junta-te a milhares de estudantes e aprende com cursos práticos, ao teu ritmo, com certificado profissional.</p>
+      <a class="btn-solid" href="{% url 'signup' %}">Começar agora</a>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap band-grid">
+      <h2>APRENDE AS TECNOLOGIAS USADAS NAS MELHORES EMPRESAS DE SOFTWARE DO MUNDO</h2>
+      <div class="band-logos"><span>django</span><span>node</span><span>MongoDB</span><span>express</span></div>
+      <p>Domina as ferramentas que as grandes empresas usam todos os dias — do backend ao frontend, com projetos reais e tecnologias modernas.</p>
+    </div>
+  </section>
+
+  <section class="courses">
+    <div class="wrap">
+      <h2>Escolha o seu curso...</h2>
+      <div class="course-grid">
+        <a href="{% url 'landing' %}">Python &amp; Django</a>
+        <a href="{% url 'landing' %}">JavaScript</a>
+        <a href="{% url 'landing' %}">Django REST</a>
+        <a href="{% url 'landing' %}">React</a>
+        <a href="{% url 'landing' %}">Node.js</a>
+        <a href="{% url 'landing' %}">Express &amp; APIs</a>
+      </div>
+      <a class="explore" href="{% url 'landing' %}">Explore Todos Os Cursos ⟶</a>
+    </div>
+  </section>
+
+  <section class="careers">
+    <div class="wrap">
+      <h2>DESENVOLVEMOS CARREIRAS<br>ATRAVÉS DA EDUCAÇÃO</h2>
+      <p>Subscreve e recebe novidades</p>
+      {% if messages %}
+      {% for message in messages %}<div class="flash">{{ message }}</div>{% endfor %}
+      {% endif %}
+      <form class="news-form" method="post">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="O teu e-mail" required />
+        <button type="submit">SUBSCREVER</button>
+      </form>
+    </div>
+    <span class="confetti" style="left:6%;top:20%">●</span>
+    <span class="confetti" style="left:12%;top:65%;color:#7c3aed">▲</span>
+    <span class="confetti" style="left:22%;top:30%;color:#22c55e">■</span>
+    <span class="confetti" style="right:8%;top:25%;color:#22c55e">●</span>
+    <span class="confetti" style="right:15%;top:60%">▲</span>
+    <span class="confetti" style="right:25%;top:35%;color:#7c3aed">■</span>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <h4>Navegação</h4>
+          <a href="{% url 'landing' %}">Cursos</a>
+          <a href="{% url 'landing' %}">Programas</a>
+          <a href="{% url 'landing' %}">Comunidade</a>
+        </div>
+        <div>
+          <h4>Cursos</h4>
+          <a href="{% url 'landing' %}">Python &amp; Django</a>
+          <a href="{% url 'landing' %}">JavaScript</a>
+          <a href="{% url 'landing' %}">APIs &amp; Backend</a>
+        </div>
+        <div>
+          <h4>Sobre</h4>
+          <a href="{% url 'login' %}">Entrar</a>
+          <a href="{% url 'signup' %}">Criar conta</a>
+        </div>
+      </div>
+      <div class="social">
+        <a href="#" aria-label="Facebook">f</a>
+        <a href="#" aria-label="Twitter">t</a>
+        <a href="#" aria-label="Instagram">i</a>
+        <a href="#" aria-label="LinkedIn">in</a>
+      </div>
+      <div class="copy"><span>© 2026 Academy. Todos os direitos reservados.</span></div>
+    </div>
+  </footer>
+
+</body>
+</html>

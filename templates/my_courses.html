@@ -225,9 +225,9 @@
   <header>
     <div class="header-inner">
     <button class="hamburger" id="navToggle" aria-label="Open menu">☰</button>
-    <a class="logo" href="{% url 'dashboard' %}"><img src="{% static 'images/logo.png' %}" alt="Academy"></a>
-    <a class="top-link hide-m" href="{% url 'dashboard' %}">Creative Feed</a>
-    <form class="search-form" method="get" action="{% url 'dashboard' %}">
+    <a class="logo" href="{% url 'landing' %}"><img src="{% static 'images/logo.png' %}" alt="Academy"></a>
+    <a class="top-link hide-m" href="{% url 'landing' %}">Creative Feed</a>
+    <form class="search-form" method="get" action="{% url 'landing' %}">
       <div class="search-wrap">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Search classes, digital products, teachers" />
@@ -268,9 +268,9 @@
   <div class="layout">
     <button class="scrim" id="navScrim" hidden aria-label="Close menu"></button>
     <aside id="sidebar">
-      <a class="side-link strong {% if not active_category %}active{% endif %}" href="{% url 'dashboard' %}">All Classes</a>
+      <a class="side-link strong {% if not active_category %}active{% endif %}" href="{% url 'landing' %}">All Classes</a>
       {% for cat in categories %}
-      <a class="side-link {% if active_category == cat %}active{% endif %}" href="{% url 'dashboard' %}?category={{ cat|urlencode }}">{{ cat }}</a>
+      <a class="side-link {% if active_category == cat %}active{% endif %}" href="{% url 'landing' %}?category={{ cat|urlencode }}">{{ cat }}</a>
       {% endfor %}
     </aside>
 
@@ -343,7 +343,7 @@
     </main>
   </div>
   <nav class="bottom-nav">
-    <a href="{% url 'dashboard' %}" class="{% if bottom == 'all' %}active{% endif %}">
+    <a href="{% url 'landing' %}" class="{% if bottom == 'all' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       All
     </a>

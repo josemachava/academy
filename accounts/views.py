@@ -41,21 +41,33 @@ def ensure_demo_courses():
         Course.objects.create(**data)
 
 
+def landing_view(request):
+    if request.method == "POST":
+        messages.success(request, "Subscrição confirmada! Bem-vindo à Academy.")
+        return redirect("landing")
+    ctx = _dashboard_context(
+        request.user,
+        request.GET.get("category") or None,
+        request.GET.get("q") or None,
+    )
+    return render(request, "dashboard.html", ctx)
+
+
 def signup_view(request):
     if request.user.is_authenticated:
-        return redirect("dashboard")
+        return redirect("landing")
     form = SignupForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.save()
         login(request, user)
         messages.success(request, f"Bem-vindo, {user.first_name}! A sua conta foi criada.")
-        return redirect("dashboard")
+        return redirect("landing")
     return render(request, "signup.html", {"form": form})
 
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect("dashboard")
+        return redirect("landing")
     form = LoginForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.cleaned_data["user"]
@@ -64,7 +76,7 @@ def login_view(request):
         if not remember:
             request.session.set_expiry(0)
         messages.success(request, f"Bem-vindo de volta, {user.first_name}!")
-        return redirect("dashboard")
+        return redirect("landing")
     return render(request, "login.html", {"form": form})
 
 
@@ -120,11 +132,8 @@ def _paginate(request, items):
     return page_obj, qs
 
 
-@login_required
-def dashboard_view(request):
-    category = request.GET.get("category") or None
-    query = request.GET.get("q") or None
-    ctx = _course_context(request.user)
+def _dashboard_context(user, category=None, query=None):
+    ctx = _course_context(user)
     all_courses = list(ctx["courses"])
     if category:
         all_courses = [c for c in all_courses if c.category == category]
@@ -141,9 +150,9 @@ def dashboard_view(request):
             items = [c for c in all_courses if c.category == cat]
             if items:
                 sections.append({"title": cat, "courses": items})
-    if not category and not query:
+    if not category and not query and getattr(user, "is_authenticated", False):
         inprog_ids = list(
-            Enrollment.objects.filter(user=request.user, status="enrolled")
+            Enrollment.objects.filter(user=user, status="enrolled")
             .order_by("-updated_at")
             .values_list("course_id", flat=True)
         )
@@ -156,7 +165,15 @@ def dashboard_view(request):
     ctx["active_category"] = category
     ctx["query"] = query or ""
     ctx["bottom"] = "all"
-    return render(request, "dashboard.html", ctx)
+    return ctx
+
+
+def dashboard_view(request):
+    from django.http import HttpResponseRedirect
+    from django.urls import reverse
+    qs = request.META.get("QUERY_STRING", "")
+    url = reverse("landing") + (f"?{qs}" if qs else "")
+    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -255,8 +272,10 @@ def enroll_view(request, course_id):
     )
     if created:
         messages.success(request, f"You are now enrolled in '{course.title[:50]}'.")
-    nxt = request.POST.get("next", "dashboard")
-    return redirect(nxt if nxt in ("dashboard", "enrolled", "completed", "saved") else "dashboard")
+    nxt = request.POST.get("next", "landing")
+    if nxt == "dashboard":
+        nxt = "landing"
+    return redirect((nxt if nxt in ("landing", "dashboard", "enrolled", "completed", "saved") else "landing"))
 
 
 @login_required
@@ -269,7 +288,7 @@ def complete_view(request, course_id):
     enrollment.save()
     messages.success(request, f"Course '{course.title[:50]}' marked as completed.")
     nxt = request.POST.get("next", "enrolled")
-    return redirect(nxt if nxt in ("dashboard", "enrolled", "completed", "saved") else "enrolled")
+    return redirect((nxt if nxt in ("landing", "dashboard", "enrolled", "completed", "saved") else "enrolled"))
 
 
 @login_required
@@ -278,7 +297,7 @@ def unenroll_view(request, course_id):
     Enrollment.objects.filter(user=request.user, course_id=course_id).delete()
     messages.info(request, "Enrollment removed.")
     nxt = request.POST.get("next", "enrolled")
-    return redirect(nxt if nxt in ("dashboard", "enrolled", "completed", "saved") else "enrolled")
+    return redirect((nxt if nxt in ("landing", "dashboard", "enrolled", "completed", "saved") else "enrolled"))
 
 
 @login_required
@@ -291,5 +310,7 @@ def toggle_save_view(request, course_id):
         messages.info(request, "Removed from saved courses.")
     else:
         messages.success(request, "Course saved for later.")
-    nxt = request.POST.get("next", "dashboard")
-    return redirect(nxt if nxt in ("dashboard", "enrolled", "completed", "saved") else "dashboard")
+    nxt = request.POST.get("next", "landing")
+    if nxt == "dashboard":
+        nxt = "landing"
+    return redirect((nxt if nxt in ("landing", "dashboard", "enrolled", "completed", "saved") else "landing"))
