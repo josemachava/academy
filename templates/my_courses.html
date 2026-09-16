@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>All Online Classes · Academy</title>
+  <title>{{ page_title|default:'My classes' }} · Academy</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
@@ -60,7 +60,7 @@
     .side-link { display: block; font-size: 0.9rem; color: var(--ink); text-decoration: none; padding: 0.42rem 0; }
     .side-link:hover { text-decoration: underline; }
     .side-link.strong { font-weight: 800; }
-    .side-link.active { font-weight: 800; color: var(--accent); }
+    .side-link.active { font-weight: 800; }
     .side-sep { border-top: 1px solid var(--border); margin: 1rem 2rem 1rem 0; }
     .side-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 0.3rem; }
     .side-count { color: var(--muted); font-weight: 400; }
@@ -73,11 +73,8 @@
     .view-all { font-size: 0.8rem; font-weight: 600; color: var(--ink); background: #fff; border: 1px solid #c9c9cd; border-radius: 5px; padding: 0.4rem 0.9rem; cursor: pointer; text-decoration: none; }
     .view-all:hover { border-color: var(--ink); }
 
-    .course-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2.4rem 2rem; }
-    @media (max-width: 1280px) { .course-grid { grid-template-columns: repeat(4, 1fr); } }
-    @media (max-width: 1120px) { .course-grid { grid-template-columns: repeat(3, 1fr); } }
+    .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.6rem 1.4rem; }
 
-    a.enroll-btn { display: inline-flex; align-items: center; justify-content: center; }
     .enroll-row { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
     .enroll-row form { flex: 1; display: flex; }
     .enroll-btn { flex: 1; background: #eef2ff; color: var(--accent); border: none; border-radius: 8px; font-family: inherit; font-size: 0.8rem; font-weight: 700; padding: 0.55rem; cursor: pointer; transition: background 0.15s, color 0.15s; }
@@ -101,38 +98,6 @@
     .section-head { flex-wrap: wrap; gap: 0.6rem; }
     .enroll-row { flex-wrap: wrap; }
     .bottom-nav { display: none; }
-    .continue-card { margin-bottom: 2.2rem; }
-    .detail-h { font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem; }
-    .continue-row { display: flex; gap: 1.2rem; align-items: flex-start; }
-    .continue-thumb { position: relative; flex-shrink: 0; width: 200px; height: 120px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2.4rem; overflow: hidden; text-decoration: none; }
-    .dur-badge { position: absolute; bottom: 8px; right: 8px; background: rgba(20,24,40,0.85); color: #fff; font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.45rem; border-radius: 4px; }
-    .continue-body { flex: 1; min-width: 0; }
-    .kind-label { font-size: 0.76rem; color: var(--muted); margin-bottom: 0.15rem; }
-    .continue-title { font-size: 1.02rem; font-weight: 700; line-height: 1.4; margin-bottom: 0.9rem; }
-    .continue-progress { display: flex; align-items: center; gap: 0.8rem; }
-    .continue-track { flex: 1; height: 3px; background: #e4e4e7; border-radius: 2px; overflow: hidden; }
-    .continue-fill { height: 100%; background: #0f766e; border-radius: 2px; }
-    .continue-left { font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
-    .detail-actions { display: flex; gap: 0.6rem; margin-top: 1rem; max-width: 420px; }
-    .detail-actions form { flex: 1; display: flex; }
-    .picks { margin-bottom: 2.2rem; }
-    .picks-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-    .picks-head .detail-h { margin-bottom: 0; }
-    .picks-arrows { display: flex; gap: 0.5rem; }
-    .picks-arrows button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border); background: #f4f4f5; color: var(--muted); font-size: 1.1rem; cursor: pointer; line-height: 1; }
-    .picks-arrows button:last-child { background: #fff; color: var(--ink); border-color: var(--ink); }
-    .picks-track { display: flex; gap: 1.1rem; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 0.4rem; scrollbar-width: none; }
-    .picks-track::-webkit-scrollbar { display: none; }
-    .pick-card { flex: 0 0 200px; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; }
-    .pick-thumb { position: relative; height: 118px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; overflow: hidden; margin-bottom: 0.55rem; }
-    .pick-flag { position: absolute; top: 8px; left: 8px; background: #dbeafe; color: #1e3a8a; font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 4px; }
-    .pick-title { font-size: 0.9rem; font-weight: 700; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 0.45rem; }
-    .pick-by { font-size: 0.76rem; color: var(--muted); }
-    @media (max-width: 900px) {
-      .continue-row { flex-direction: column; }
-      .continue-thumb { width: 100%; height: 170px; }
-      .pick-card { flex-basis: 160px; }
-    }
     .course-grid .pick-card { flex: none; }
     .course-grid .pick-thumb { height: 150px; font-size: 2.4rem; }
     .pick-thumb-wrap { position: relative; margin-bottom: 0.9rem; }
@@ -237,10 +202,11 @@
     </aside>
 
     <main>
-      <h1 class="page-title">{% if active_category %}{{ active_category }}{% elif query %}Results for “{{ query }}”{% else %}All Online Classes{% endif %}</h1>
+      <h1 class="page-title">{{ page_title|default:"My classes" }}</h1>
 
       <div class="section-head">
-        <h2>Popular Classes</h2>
+        <h2>{{ page_sub|default:"" }}</h2>
+        <a class="view-all" href="{% url 'dashboard' %}">Browse all</a>
       </div>
 
       <div class="course-grid">
@@ -253,7 +219,7 @@
               <span class="dur-badge">{{ course.duration }}</span>
             </a>
               <form method="post" action="{% url 'toggle_save' course.id %}" class="pick-save-form">
-                {% csrf_token %}<input type="hidden" name="next" value="dashboard" />
+                {% csrf_token %}<input type="hidden" name="next" value="{{ page }}" />
                 <button type="submit" class="pick-save {% if course.is_saved %}on{% endif %}" title="Save">
                   <svg viewBox="0 0 24 24" fill="{% if course.is_saved %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
                 </button>
@@ -266,12 +232,12 @@
             <div class="done-line">✓ Completed</div>
             {% elif course.is_enrolled %}
             <div class="progress-wrap"><div class="progress-bar" style="width:{{ course.enrollment.progress|default:0 }}%"></div></div>
-            <div class="status-line"><span>Enrolled · {{ course.enrollment.progress|default:0 }}%</span><form method="post" action="{% url 'complete_course' course.id %}">{% csrf_token %}<input type="hidden" name="next" value="dashboard" /><button type="submit" class="link-btn">Mark complete</button></form></div>
+            <div class="status-line"><span>Enrolled · {{ course.enrollment.progress|default:0 }}%</span><span class="status-links"><form method="post" action="{% url 'complete_course' course.id %}">{% csrf_token %}<input type="hidden" name="next" value="{{ page }}" /><button type="submit" class="link-btn">Mark complete</button></form><form method="post" action="{% url 'unenroll_course' course.id %}">{% csrf_token %}<input type="hidden" name="next" value="{{ page }}" /><button type="submit" class="link-btn danger">Unenroll</button></form></span></div>
             {% endif %}
         </div>        {% empty %}
         <div class="empty-state">
-          <h3>No classes found</h3>
-          <p>Try a different search or category.</p>
+          <h3>{{ empty_msg|default:"Nothing here yet." }}</h3>
+          <p>Browse the catalogue and start learning today.</p>
         </div>
         {% endfor %}
       </div>
