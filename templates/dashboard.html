@@ -24,10 +24,13 @@
 
     /* ── TOP BAR (dark) ── */
     header {
-      background: #fff; color: var(--ink); min-height: 60px;
-      display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap;
-      padding: 0.5rem 1.4rem; position: sticky; top: 0; z-index: 100;
+      background: #fff; position: sticky; top: 0; z-index: 100;
       border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: 1320px; margin: 0 auto; width: 100%;
+      min-height: 60px; display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap;
+      padding: 0.5rem 3rem; color: var(--ink);
     }
     .hamburger { display: none; background: none; border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.55rem; cursor: pointer; color: var(--ink); font-size: 1.05rem; line-height: 1; }
     .logo img { height: 30px; width: auto; display: block; }
@@ -47,6 +50,20 @@
     .bell { background: none; border: none; color: var(--ink); cursor: pointer; padding: 0; display: flex; }
     .scrim { display: none; }
     .user-menu { position: relative; }
+    .bell { position: relative; }
+    .bell-dot { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; border-radius: 9px; background: #e11d48; color: #fff; font-size: 0.62rem; font-weight: 800; display: flex; align-items: center; justify-content: center; padding: 0 4px; }
+    .notif-card { min-width: 300px; max-width: 320px; padding-bottom: 0.6rem; }
+    .menu-title { font-size: 0.9rem; font-weight: 800; margin-bottom: 0.4rem; }
+    .notif-item { display: flex; gap: 0.65rem; align-items: flex-start; text-decoration: none; color: inherit; padding: 0.65rem 0; border-top: 1px solid var(--border); }
+    .notif-item > span:last-child { min-width: 0; display: flex; flex-direction: column; }
+    .notif-item strong { font-size: 0.8rem; }
+    .notif-item em { font-style: normal; font-size: 0.78rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .notif-item small { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
+    .notif-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 0.3rem; flex-shrink: 0; }
+    .notif-dot.enrolled { background: var(--accent); }
+    .notif-dot.done { background: var(--success); }
+    .notif-dot.new { background: #6d28d9; }
+    .notif-empty { font-size: 0.82rem; color: var(--muted); text-align: center; padding: 1.2rem 0; border-top: 1px solid var(--border); }
     button.avatar { border: none; cursor: pointer; font-family: inherit; }
     .menu-card { position: absolute; right: 0; top: calc(100% + 10px); background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 12px 32px rgba(0,0,0,0.14); min-width: 230px; padding: 1rem 1rem 0.9rem; z-index: 200; }
     .menu-card[hidden] { display: none; }
@@ -65,11 +82,12 @@
     .layout { display: flex; max-width: 1320px; margin: 0 auto; align-items: flex-start; }
 
     /* ── SIDEBAR ── */
-    aside { width: 225px; flex-shrink: 0; padding: 2.2rem 0 2rem 1.4rem; position: sticky; top: 60px; max-height: calc(100vh - 60px); overflow-y: auto; }
-    .side-link { display: block; font-size: 0.9rem; color: var(--ink); text-decoration: none; padding: 0.42rem 0; }
-    .side-link:hover { text-decoration: underline; }
+    aside { width: 225px; flex-shrink: 0; padding: 2.2rem 0 2rem 3rem; position: sticky; top: 60px; max-height: calc(100vh - 60px); overflow-y: auto; }
+    .side-link { display: block; font-size: 0.9rem; color: var(--ink); text-decoration: none; padding: 0.42rem 0.6rem; margin-right: 1rem; border-radius: 6px; }
+    .side-link:hover { color: var(--accent); }
     .side-link.strong { font-weight: 800; }
-    .side-link.active { font-weight: 800; color: var(--accent); }
+    .side-link.active { font-weight: 800; color: var(--accent); background: #eef2ff; }
+    .side-link.active:hover { text-decoration: none; }
     .side-sep { border-top: 1px solid var(--border); margin: 1rem 2rem 1rem 0; }
     .side-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 0.3rem; }
     .side-count { color: var(--muted); font-weight: 400; }
@@ -162,6 +180,7 @@
     .cat-row { margin-bottom: 2.8rem; }
     .row-track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x proximity; padding: 0.5rem 2rem 1.2rem 0.2rem; margin-right: -3rem; scrollbar-width: none; }
     .row-track::-webkit-scrollbar { display: none; }
+    .row-track .empty-state { flex: 1 0 100%; }
     .d-card { flex: 0 0 300px; scroll-snap-align: start; background: #fff; border-radius: 0 0 8px 8px; box-shadow: 0 8px 28px rgba(20,24,60,0.10); overflow: hidden; padding-bottom: 1.1rem; }
     .d-cover { position: relative; display: flex; align-items: center; justify-content: center; height: 185px; font-size: 3rem; text-decoration: none; }
     .d-staff { position: absolute; top: 12px; left: 14px; color: #fff; font-weight: 800; font-size: 1rem; text-shadow: 0 1px 8px rgba(0,0,0,0.55); }
@@ -189,7 +208,7 @@
     .message .close { margin-left: auto; background: none; border: none; color: #fff; cursor: pointer; opacity: 0.6; }
 
     @media (max-width: 900px) {
-      header { justify-content: center; gap: 0; }
+      .header-inner { justify-content: center; gap: 0; padding: 0.5rem 1rem; }
       .hamburger { display: none; }
       header .top-link, .top-right { display: none; }
       .logo { display: none; }
@@ -210,10 +229,8 @@
       .bottom-nav a.active { color: var(--accent); }
       .page-title { font-size: 1.5rem; }
       .course-grid { grid-template-columns: 1fr; }
-      .row-track { flex-direction: column; overflow: visible; margin-right: 0; padding: 0; }
-      .d-card { flex: none; width: 100%; }
-      .cat-row .picks-arrows { display: none; }
-      .d-title { -webkit-line-clamp: unset; font-size: 1.1rem; }
+      .row-track { margin-right: -1rem; }
+      .d-card { flex-basis: 240px; }
       .pagination { gap: 0.35rem; margin-top: 1.6rem; }
       .page-btn { min-width: 1.9rem; height: 1.9rem; font-size: 0.78rem; }
       .page-info { flex-basis: 100%; text-align: center; order: -1; margin: 0 0 0.2rem; }
@@ -237,6 +254,7 @@
   {% endif %}
 
   <header>
+    <div class="header-inner">
     <button class="hamburger" id="navToggle" aria-label="Open menu">☰</button>
     <a class="logo" href="{% url 'dashboard' %}"><img src="{% static 'images/logo.png' %}" alt="Academy"></a>
     <a class="top-link hide-m" href="{% url 'dashboard' %}">Creative Feed</a>
@@ -248,9 +266,23 @@
     </form>
     <nav class="top-right">
       <a class="top-link hide-m" href="{% url 'enrolled' %}">My Classes</a>
-      <button class="bell" aria-label="Notifications">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-      </button>
+      <div class="user-menu">
+        <button class="bell" id="bellBtn" aria-label="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          {% if notif_count %}<span class="bell-dot">{{ notif_count }}</span>{% endif %}
+        </button>
+        <div class="menu-card notif-card" id="bellCard" hidden>
+          <div class="menu-title">Notifications</div>
+          {% for n in notifications %}
+          <a class="notif-item" href="{% url 'course_detail' n.course_id %}">
+            <span class="notif-dot {{ n.kind }}"></span>
+            <span><strong>{{ n.title }}</strong><em>{{ n.text }}</em><small>{{ n.when|timesince }} ago</small></span>
+          </a>
+          {% empty %}
+          <div class="notif-empty">No notifications yet.</div>
+          {% endfor %}
+        </div>
+      </div>
       <div class="user-menu">
         <button class="avatar" id="avatarBtn" aria-label="Account menu">{{ user.first_name.0|default:"A" }}{{ user.last_name.0 }}</button>
         <div class="menu-card" id="userMenu" hidden>
@@ -261,6 +293,7 @@
         </div>
       </div>
     </nav>
+    </div>
   </header>
 
   <div class="layout">
@@ -270,11 +303,6 @@
       {% for cat in categories %}
       <a class="side-link {% if active_category == cat %}active{% endif %}" href="{% url 'dashboard' %}?category={{ cat|urlencode }}">{{ cat }}</a>
       {% endfor %}
-      <div class="side-sep"></div>
-      <div class="side-label">My Progress</div>
-      <a class="side-link {% if page == 'enrolled' %}active{% endif %}" href="{% url 'enrolled' %}">Enrolled <span class="side-count">({{ enrolled_count|default:0 }})</span></a>
-      <a class="side-link {% if page == 'completed' %}active{% endif %}" href="{% url 'completed' %}">Completed <span class="side-count">({{ completed_count|default:0 }})</span></a>
-      <a class="side-link {% if page == 'saved' %}active{% endif %}" href="{% url 'saved' %}">Saved <span class="side-count">({{ saved_count|default:0 }})</span></a>
     </aside>
 
     <main>
@@ -314,7 +342,7 @@
             <div class="done-line pad">✓ Completed</div>
             {% elif course.is_enrolled %}
             <div class="progress-wrap pad"><div class="progress-bar" style="width:{{ course.enrollment.progress|default:0 }}%"></div></div>
-            <div class="status-line pad"><span>Enrolled · {{ course.enrollment.progress|default:0 }}%</span><form method="post" action="{% url 'complete_course' course.id %}">{% csrf_token %}<input type="hidden" name="next" value="dashboard" /><button type="submit" class="link-btn">Mark complete</button></form></div>
+            
             {% endif %}
           </article>
           {% empty %}
@@ -370,6 +398,13 @@
         avatarBtn.addEventListener('click', function (e) { e.stopPropagation(); userMenu.hidden = !userMenu.hidden; });
         document.addEventListener('click', function (e) { if (!userMenu.hidden && !userMenu.contains(e.target)) userMenu.hidden = true; });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') userMenu.hidden = true; });
+      var bellBtn = document.getElementById('bellBtn');
+      var bellCard = document.getElementById('bellCard');
+      if (bellBtn && bellCard) {
+        bellBtn.addEventListener('click', function (e) { e.stopPropagation(); bellCard.hidden = !bellCard.hidden; });
+        document.addEventListener('click', function (e) { if (!bellCard.hidden && !bellCard.contains(e.target)) bellCard.hidden = true; });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') bellCard.hidden = true; });
+      }
       }
       document.querySelectorAll('.cat-row').forEach(function (row) {
         var track = row.querySelector('.row-track');

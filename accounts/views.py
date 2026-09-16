@@ -141,7 +141,20 @@ def dashboard_view(request):
             items = [c for c in all_courses if c.category == cat]
             if items:
                 sections.append({"title": cat, "courses": items})
+    if not category and not query:
+        inprog_ids = list(
+            Enrollment.objects.filter(user=request.user, status="enrolled")
+            .order_by("-updated_at")
+            .values_list("course_id", flat=True)
+        )
+        if inprog_ids:
+            order = {cid: i for i, cid in enumerate(inprog_ids)}
+            inprog = [c for c in all_courses if c.id in order]
+            inprog.sort(key=lambda c: order[c.id])
+            sections.insert(0, {"title": "In Progress", "courses": inprog})
     ctx["sections"] = sections
+    ctx["active_category"] = category
+    ctx["query"] = query or ""
     ctx["bottom"] = "all"
     return render(request, "dashboard.html", ctx)
 
