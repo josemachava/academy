@@ -150,6 +150,28 @@
     .pick-save:hover { background: rgba(10,12,20,0.85); }
     .pick-save.on { background: var(--accent); }
     .pick-save svg { width: 14px; height: 14px; }
+    .cat-row { margin-bottom: 2.8rem; }
+    .row-track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x proximity; padding: 0.5rem 2rem 1.2rem 0.2rem; margin-right: -3rem; scrollbar-width: none; }
+    .row-track::-webkit-scrollbar { display: none; }
+    .d-card { flex: 0 0 300px; scroll-snap-align: start; background: #fff; border-radius: 0 0 8px 8px; box-shadow: 0 8px 28px rgba(20,24,60,0.10); overflow: hidden; padding-bottom: 1.1rem; }
+    .d-cover { position: relative; display: flex; align-items: center; justify-content: center; height: 185px; font-size: 3rem; text-decoration: none; }
+    .d-staff { position: absolute; top: 12px; left: 14px; color: #fff; font-weight: 800; font-size: 1rem; text-shadow: 0 1px 8px rgba(0,0,0,0.55); }
+    .d-staff i { font-style: normal; color: var(--green); }
+    .d-teacher { display: flex; align-items: center; gap: 0.65rem; padding: 0.9rem 1.1rem 0; }
+    .d-avatar { width: 40px; height: 40px; border-radius: 50%; background: #eef2ff; color: var(--accent); font-weight: 800; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .d-tinfo { min-width: 0; display: flex; flex-direction: column; }
+    .d-tinfo strong { font-size: 0.92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .d-tinfo em { font-style: normal; font-size: 0.78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .d-title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; padding: 0.7rem 1.1rem 0; font-size: 1.02rem; font-weight: 800; line-height: 1.35; color: var(--ink); text-decoration: none; }
+    .d-title:hover { color: var(--accent); }
+    .d-foot { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.1rem 0; }
+    .d-meta { font-size: 0.85rem; color: var(--muted); }
+    .d-meta b { color: #6d28d9; font-weight: 700; }
+    .d-save { background: none; border: none; cursor: pointer; color: var(--ink); padding: 0.2rem; display: flex; }
+    .d-save:hover { color: var(--accent); }
+    .d-save.on { color: var(--accent); }
+    .d-save svg { width: 20px; height: 20px; }
+    .pad { margin-left: 1.1rem; margin-right: 1.1rem; }
     .empty-state h3 { font-size: 1.05rem; margin-bottom: 0.4rem; }
     .empty-state p { color: var(--muted); font-size: 0.875rem; }
 
@@ -161,7 +183,7 @@
       header { justify-content: center; gap: 0; }
       .hamburger { display: none; }
       header .top-link, .top-right { display: none; }
-      .logo img { height: 32px; }
+      .logo { display: none; }
       .search-form { order: 5; flex-basis: 100%; max-width: none; }
       aside, .scrim { display: none; }
       main { padding: 1.5rem 1rem 6rem; }
@@ -179,6 +201,8 @@
       .bottom-nav a.active { color: var(--accent); }
       .page-title { font-size: 1.5rem; }
       .course-grid { grid-template-columns: 1fr; }
+      .d-card { flex-basis: 252px; }
+      .row-track { margin-right: -1rem; }
       .pagination { gap: 0.35rem; margin-top: 1.6rem; }
       .page-btn { min-width: 1.9rem; height: 1.9rem; font-size: 0.78rem; }
       .page-info { flex-basis: 100%; text-align: center; order: -1; margin: 0 0 0.2rem; }
@@ -237,66 +261,59 @@
     </aside>
 
     <main>
-      <h1 class="page-title">{% if active_category %}{{ active_category }}{% elif query %}Results for “{{ query }}”{% else %}All Online Classes{% endif %}</h1>
+      <h1 class="page-title">{% if active_category %}{{ active_category }}{% elif query %}Results{% else %}Discover{% endif %}</h1>
 
-      <div class="section-head">
-        <h2>Popular Classes</h2>
-      </div>
-
-      <div class="course-grid">
-        {% for course in courses %}
-        <div class="pick-card grid-pick">
-          <div class="pick-thumb-wrap">
-            <a class="pick-thumb {% cycle 'g0' 'g1' 'g2' 'g3' 'g4' %}" href="{% url 'course_detail' course.id %}">
+      {% for section in sections %}
+      <section class="cat-row">
+        <div class="picks-head">
+          <h2 class="detail-h">{{ section.title }}</h2>
+          <div class="picks-arrows">
+            <button class="row-prev" aria-label="Previous">‹</button>
+            <button class="row-next" aria-label="Next">›</button>
+          </div>
+        </div>
+        <div class="row-track">
+          {% for course in section.courses %}
+          <article class="d-card">
+            <a class="d-cover {% cycle 'g0' 'g1' 'g2' 'g3' 'g4' %}" href="{% url 'course_detail' course.id %}">
               <span>{{ course.emoji }}</span>
-              {% if course.is_new %}<span class="pick-flag">New</span>{% else %}<span class="pick-flag">Popular</span>{% endif %}
-              <span class="dur-badge">{{ course.duration }}</span>
+              {% if course.staff_pick %}<span class="d-staff">Staff Pick<i>.</i></span>{% endif %}
             </a>
-              <form method="post" action="{% url 'toggle_save' course.id %}" class="pick-save-form">
+            <div class="d-teacher">
+              <span class="d-avatar">{{ course.instructor|slice:":1" }}</span>
+              <span class="d-tinfo"><strong>{{ course.instructor }}</strong><em>{{ course.role }}</em></span>
+            </div>
+            <a class="d-title" href="{% url 'course_detail' course.id %}">{{ course.title }}</a>
+            <div class="d-foot">
+              <span class="d-meta"><b>{{ course.duration }}</b> · {{ course.lessons }} Lessons</span>
+              <form method="post" action="{% url 'toggle_save' course.id %}">
                 {% csrf_token %}<input type="hidden" name="next" value="dashboard" />
-                <button type="submit" class="pick-save {% if course.is_saved %}on{% endif %}" title="Save">
+                <button type="submit" class="d-save {% if course.is_saved %}on{% endif %}" title="Save">
                   <svg viewBox="0 0 24 24" fill="{% if course.is_saved %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
                 </button>
               </form>
-          </div>
-          <span class="kind-label">Course</span>
-          <a class="pick-title" href="{% url 'course_detail' course.id %}">{{ course.title }}</a>
-          <span class="pick-by">By: {{ course.instructor }}</span>
+            </div>
             {% if course.is_completed %}
-            <div class="done-line">✓ Completed</div>
+            <div class="done-line pad">✓ Completed</div>
             {% elif course.is_enrolled %}
-            <div class="progress-wrap"><div class="progress-bar" style="width:{{ course.enrollment.progress|default:0 }}%"></div></div>
-            <div class="status-line"><span>Enrolled · {{ course.enrollment.progress|default:0 }}%</span><form method="post" action="{% url 'complete_course' course.id %}">{% csrf_token %}<input type="hidden" name="next" value="dashboard" /><button type="submit" class="link-btn">Mark complete</button></form></div>
+            <div class="progress-wrap pad"><div class="progress-bar" style="width:{{ course.enrollment.progress|default:0 }}%"></div></div>
+            <div class="status-line pad"><span>Enrolled · {{ course.enrollment.progress|default:0 }}%</span><form method="post" action="{% url 'complete_course' course.id %}">{% csrf_token %}<input type="hidden" name="next" value="dashboard" /><button type="submit" class="link-btn">Mark complete</button></form></div>
             {% endif %}
-        </div>        {% empty %}
-        <div class="empty-state">
-          <h3>No classes found</h3>
-          <p>Try a different search or category.</p>
+          </article>
+          {% empty %}
+          <div class="empty-state">
+            <h3>No classes found</h3>
+            <p>Try a different search or category.</p>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
+      </section>
+      {% empty %}
+      <div class="empty-state">
+        <h3>No classes found</h3>
+        <p>Try a different search or category.</p>
       </div>
-      {% if courses.paginator.num_pages > 1 %}
-      <nav class="pagination">
-        {% if courses.has_previous %}
-        <a class="page-btn" href="?{% if base_qs %}{{ base_qs }}&{% endif %}page={{ courses.previous_page_number }}">‹ Prev</a>
-        {% else %}
-        <span class="page-btn disabled">‹ Prev</span>
-        {% endif %}
-        <span class="page-info">Page {{ courses.number }} of {{ courses.paginator.num_pages }}</span>
-        {% for num in courses.paginator.page_range %}
-        {% if num == courses.number %}
-        <span class="page-btn current">{{ num }}</span>
-        {% elif num <= 3 or num > courses.paginator.num_pages|add:"-3" or num == courses.number|add:"-1" or num == courses.number|add:"1" %}
-        <a class="page-btn" href="?{% if base_qs %}{{ base_qs }}&{% endif %}page={{ num }}">{{ num }}</a>
-        {% endif %}
-        {% endfor %}
-        {% if courses.has_next %}
-        <a class="page-btn" href="?{% if base_qs %}{{ base_qs }}&{% endif %}page={{ courses.next_page_number }}">Next ›</a>
-        {% else %}
-        <span class="page-btn disabled">Next ›</span>
-        {% endif %}
-      </nav>
-      {% endif %}
+      {% endfor %}
     </main>
   </div>
   <nav class="bottom-nav">
@@ -330,6 +347,13 @@
       });
       if (scrim) scrim.addEventListener('click', close);
       side.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', close); });
+      document.querySelectorAll('.cat-row').forEach(function (row) {
+        var track = row.querySelector('.row-track');
+        var prev = row.querySelector('.row-prev');
+        var next = row.querySelector('.row-next');
+        if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -640, behavior: 'smooth' }); });
+        if (next) next.addEventListener('click', function () { track.scrollBy({ left: 640, behavior: 'smooth' }); });
+      });
     })();
   </script>
 </body>

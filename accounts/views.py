@@ -16,21 +16,21 @@ CATEGORIES = [
 ]
 
 DEMO_COURSES = [
-    {"title": "DaVinci Resolve 20 Masterclass: The Complete Video Editing & Color Grading Class", "instructor": "Adi Singh", "rating": 4.9, "reviews": 20, "duration": "6h 44m", "students": "7.6k", "level": "beginner", "tags": "DaVinci Resolve", "extra_tags": 11, "emoji": "🎬", "staff_pick": True, "category": "Film & Video"},
-    {"title": "Watercolor Illustration: From Sketch to Final Artwork", "instructor": "Marta Silva", "rating": 4.8, "reviews": 134, "duration": "4h 20m", "students": "2.3k", "level": "beginner", "tags": "Illustration, Watercolor", "extra_tags": 4, "emoji": "🎨", "staff_pick": True, "category": "Art & Illustration"},
-    {"title": "Python API Development with Django Rest Framework", "instructor": "José Machava", "rating": 4.8, "reviews": 421, "duration": "18h 0m", "students": "1.2k", "level": "intermediate", "tags": "Python, Django", "extra_tags": 6, "emoji": "🐙", "staff_pick": True, "is_new": True, "category": "Development"},
-    {"title": "AWS Cloud Practitioner: Deploy & Scale Your First App", "instructor": "Ana Costa", "rating": 4.6, "reviews": 89, "duration": "8h 10m", "students": "3.1k", "level": "beginner", "tags": "AWS, Cloud", "extra_tags": 3, "emoji": "☁️", "staff_pick": True, "category": "Home & Lifestyle"},
-    {"title": "Intro to Machine Learning with Python: From Zero to Deployed Model", "instructor": "Lena Müller", "rating": 4.7, "reviews": 312, "duration": "12h 30m", "students": "5.8k", "level": "beginner", "tags": "Python, PyTorch", "extra_tags": 8, "emoji": "🤖", "is_new": True, "category": "AI & Innovation"},
-    {"title": "API Security & OAuth 2.0 Deep Dive: Protect Your Backend", "instructor": "Sara Chen", "rating": 4.9, "reviews": 55, "duration": "10h 15m", "students": "920", "level": "advanced", "tags": "OAuth 2.0, JWT", "extra_tags": 5, "emoji": "🔐", "staff_pick": True, "category": "Development"},
-    {"title": "Brand Identity Design: Logo Systems That Stand Out", "instructor": "Paula Reis", "rating": 4.7, "reviews": 203, "duration": "5h 30m", "students": "4.2k", "level": "intermediate", "tags": "Branding, Logo", "extra_tags": 4, "emoji": "✨", "category": "Design"},
-    {"title": "Sourdough Baking at Home: From Starter to Perfect Loaf", "instructor": "Marco Tamele", "rating": 4.8, "reviews": 167, "duration": "3h 15m", "students": "2.8k", "level": "beginner", "tags": "Baking, Sourdough", "extra_tags": 2, "emoji": "🍞", "category": "Home & Lifestyle"},
-    {"title": "Music Production with Ableton: Make Your First Track", "instructor": "DJ Langa", "rating": 4.6, "reviews": 98, "duration": "7h 45m", "students": "1.9k", "level": "beginner", "tags": "Ableton, Mixing", "extra_tags": 5, "emoji": "🎧", "staff_pick": True, "category": "Music & Audio"},
-    {"title": "Portrait Photography: Light, Pose & Edit Like a Pro", "instructor": "Nina Petrova", "rating": 4.9, "reviews": 311, "duration": "6h 05m", "students": "6.4k", "level": "intermediate", "tags": "Photography, Lightroom", "extra_tags": 6, "emoji": "📷", "category": "Photography"},
-    {"title": "Freelance Playbook: Get Clients & Raise Your Rates", "instructor": "Tomás Nhaca", "rating": 4.5, "reviews": 76, "duration": "4h 50m", "students": "1.5k", "level": "beginner", "tags": "Freelance, Business", "extra_tags": 3, "emoji": "💼", "category": "Marketing & Business"},
-    {"title": "Blender 3D: Model & Animate Your First Character", "instructor": "Ken Watanabe", "rating": 4.7, "reviews": 189, "duration": "9h 20m", "students": "3.7k", "level": "intermediate", "tags": "Blender, 3D", "extra_tags": 7, "emoji": "🧊", "is_new": True, "category": "Animation & 3D"},
-    {"title": "Morning Habits: Build Focus & Energy That Lasts", "instructor": "Aida Sitoe", "rating": 4.8, "reviews": 240, "duration": "2h 40m", "students": "8.1k", "level": "beginner", "tags": "Habits, Focus", "extra_tags": 2, "emoji": "🌅", "category": "Personal Development"},
-    {"title": "Hand Lettering for Beginners: Styles & Composition", "instructor": "Lisa Bardot", "rating": 4.9, "reviews": 151, "duration": "5h 57m", "students": "30.9k", "level": "beginner", "tags": "Lettering, Procreate", "extra_tags": 4, "emoji": "✍️", "staff_pick": True, "category": "Art & Illustration"},
-    {"title": "Prompt Engineering: Get More from AI Assistants", "instructor": "Omar Ali", "rating": 4.6, "reviews": 112, "duration": "3h 30m", "students": "5.2k", "level": "intermediate", "tags": "AI, Prompts", "extra_tags": 3, "emoji": "💡", "is_new": True, "category": "AI & Innovation"},
+    {"title": "DaVinci Resolve 20 Masterclass: The Complete Video Editing & Color Grading Class", "instructor": "Adi Singh", "rating": 4.9, "reviews": 20, "duration": "6h 44m", "students": "7.6k", "level": "beginner", "tags": "DaVinci Resolve", "extra_tags": 11, "emoji": "🎬", "staff_pick": True, "category": "Film & Video", "role": "Video Editor & Colorist", "lessons": 12},
+    {"title": "Watercolor Illustration: From Sketch to Final Artwork", "instructor": "Marta Silva", "rating": 4.8, "reviews": 134, "duration": "4h 20m", "students": "2.3k", "level": "beginner", "tags": "Illustration, Watercolor", "extra_tags": 4, "emoji": "🎨", "staff_pick": True, "category": "Art & Illustration", "role": "Illustrator", "lessons": 10},
+    {"title": "Python API Development with Django Rest Framework", "instructor": "José Machava", "rating": 4.8, "reviews": 421, "duration": "18h 0m", "students": "1.2k", "level": "intermediate", "tags": "Python, Django", "extra_tags": 6, "emoji": "🐙", "staff_pick": True, "is_new": True, "category": "Development", "role": "Backend Developer", "lessons": 14},
+    {"title": "AWS Cloud Practitioner: Deploy & Scale Your First App", "instructor": "Ana Costa", "rating": 4.6, "reviews": 89, "duration": "8h 10m", "students": "3.1k", "level": "beginner", "tags": "AWS, Cloud", "extra_tags": 3, "emoji": "☁️", "staff_pick": True, "category": "Home & Lifestyle", "role": "Cloud Engineer", "lessons": 9},
+    {"title": "Intro to Machine Learning with Python: From Zero to Deployed Model", "instructor": "Lena Müller", "rating": 4.7, "reviews": 312, "duration": "12h 30m", "students": "5.8k", "level": "beginner", "tags": "Python, PyTorch", "extra_tags": 8, "emoji": "🤖", "is_new": True, "category": "AI & Innovation", "role": "Data Scientist", "lessons": 12},
+    {"title": "API Security & OAuth 2.0 Deep Dive: Protect Your Backend", "instructor": "Sara Chen", "rating": 4.9, "reviews": 55, "duration": "10h 15m", "students": "920", "level": "advanced", "tags": "OAuth 2.0, JWT", "extra_tags": 5, "emoji": "🔐", "staff_pick": True, "category": "Development", "role": "Security Engineer", "lessons": 8},
+    {"title": "Brand Identity Design: Logo Systems That Stand Out", "instructor": "Paula Reis", "rating": 4.7, "reviews": 203, "duration": "5h 30m", "students": "4.2k", "level": "intermediate", "tags": "Branding, Logo", "extra_tags": 4, "emoji": "✨", "category": "Design", "role": "Brand Designer", "lessons": 10},
+    {"title": "Sourdough Baking at Home: From Starter to Perfect Loaf", "instructor": "Marco Tamele", "rating": 4.8, "reviews": 167, "duration": "3h 15m", "students": "2.8k", "level": "beginner", "tags": "Baking, Sourdough", "extra_tags": 2, "emoji": "🍞", "category": "Home & Lifestyle", "role": "Baker", "lessons": 8},
+    {"title": "Music Production with Ableton: Make Your First Track", "instructor": "DJ Langa", "rating": 4.6, "reviews": 98, "duration": "7h 45m", "students": "1.9k", "level": "beginner", "tags": "Ableton, Mixing", "extra_tags": 5, "emoji": "🎧", "staff_pick": True, "category": "Music & Audio", "role": "Music Producer", "lessons": 11},
+    {"title": "Portrait Photography: Light, Pose & Edit Like a Pro", "instructor": "Nina Petrova", "rating": 4.9, "reviews": 311, "duration": "6h 05m", "students": "6.4k", "level": "intermediate", "tags": "Photography, Lightroom", "extra_tags": 6, "emoji": "📷", "category": "Photography", "role": "Photographer", "lessons": 10},
+    {"title": "Freelance Playbook: Get Clients & Raise Your Rates", "instructor": "Tomás Nhaca", "rating": 4.5, "reviews": 76, "duration": "4h 50m", "students": "1.5k", "level": "beginner", "tags": "Freelance, Business", "extra_tags": 3, "emoji": "💼", "category": "Marketing & Business", "role": "Business Coach", "lessons": 7},
+    {"title": "Blender 3D: Model & Animate Your First Character", "instructor": "Ken Watanabe", "rating": 4.7, "reviews": 189, "duration": "9h 20m", "students": "3.7k", "level": "intermediate", "tags": "Blender, 3D", "extra_tags": 7, "emoji": "🧊", "is_new": True, "category": "Animation & 3D", "role": "3D Artist", "lessons": 12},
+    {"title": "Morning Habits: Build Focus & Energy That Lasts", "instructor": "Aida Sitoe", "rating": 4.8, "reviews": 240, "duration": "2h 40m", "students": "8.1k", "level": "beginner", "tags": "Habits, Focus", "extra_tags": 2, "emoji": "🌅", "category": "Personal Development", "role": "Productivity Coach", "lessons": 6},
+    {"title": "Hand Lettering for Beginners: Styles & Composition", "instructor": "Lisa Bardot", "rating": 4.9, "reviews": 151, "duration": "5h 57m", "students": "30.9k", "level": "beginner", "tags": "Lettering, Procreate", "extra_tags": 4, "emoji": "✍️", "staff_pick": True, "category": "Art & Illustration", "role": "Illustrator & Letterer", "lessons": 10},
+    {"title": "Prompt Engineering: Get More from AI Assistants", "instructor": "Omar Ali", "rating": 4.6, "reviews": 112, "duration": "3h 30m", "students": "5.2k", "level": "intermediate", "tags": "AI, Prompts", "extra_tags": 3, "emoji": "💡", "is_new": True, "category": "AI & Innovation", "role": "AI Consultant", "lessons": 8},
 ]
 
 
@@ -122,12 +122,26 @@ def _paginate(request, items):
 
 @login_required
 def dashboard_view(request):
-    ctx = _course_context(
-        request.user,
-        category=request.GET.get("category") or None,
-        query=request.GET.get("q") or None,
-    )
-    ctx["courses"], ctx["base_qs"] = _paginate(request, ctx["courses"])
+    category = request.GET.get("category") or None
+    query = request.GET.get("q") or None
+    ctx = _course_context(request.user)
+    all_courses = list(ctx["courses"])
+    if category:
+        all_courses = [c for c in all_courses if c.category == category]
+        sections = [{"title": category, "courses": all_courses}]
+    elif query:
+        q = query.lower()
+        found = [c for c in all_courses if q in c.title.lower()]
+        sections = [{"title": f'Results for "{query}"', "courses": found}]
+    else:
+        new = [c for c in all_courses if c.is_new]
+        trending = new + [c for c in all_courses if not c.is_new]
+        sections = [{"title": "New and Trending", "courses": trending[:8]}]
+        for cat in CATEGORIES:
+            items = [c for c in all_courses if c.category == cat]
+            if items:
+                sections.append({"title": cat, "courses": items})
+    ctx["sections"] = sections
     ctx["bottom"] = "all"
     return render(request, "dashboard.html", ctx)
 

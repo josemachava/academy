@@ -55,6 +55,8 @@ class Course(models.Model):
     tags = models.CharField(max_length=255, default="", blank=True)
     category = models.CharField(max_length=100, default="Development")
     extra_tags = models.PositiveIntegerField(default=0)
+    role = models.CharField(max_length=150, default="Teacher")
+    lessons = models.PositiveIntegerField(default=10)
     emoji = models.CharField(max_length=10, default="📚")
     is_new = models.BooleanField(default=False)
     staff_pick = models.BooleanField(default=False)
