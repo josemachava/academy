@@ -1,4 +1,4 @@
-# Django Auth
+# Django Auth Aacadmy
 
 A Django authentication app with email/password login and full user registration.
 
