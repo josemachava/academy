@@ -212,11 +212,17 @@
     .message .close { margin-left: auto; background: none; border: none; color: #fff; cursor: pointer; opacity: 0.6; }
 
     @media (max-width: 900px) {
-      .header-inner { justify-content: center; gap: 0; padding: 0.5rem 1rem; }
+      .header-inner { justify-content: space-between; align-items: center; gap: 0.6rem; padding: 0.7rem 1rem; }
       .hamburger { display: none; }
-      header .top-link, .top-right { display: none; }
-      .logo { display: none; }
+      header .top-link { display: none; }
+      .top-right.user-nav { display: none; }
+      .logo { display: block; }
+      .logo img { height: 26px; }
+      nav.top-right.auth-nav { display: flex; margin-left: 0; gap: 1.2rem; align-items: center; }
+      nav.top-right.auth-nav .btn-login { display: none; }
+      nav.top-right.auth-nav .btn-signup { font-size: 0.9rem; padding: 0.55rem 1.1rem; }
       .search-form { order: 5; flex-basis: 100%; max-width: none; }
+      .search-wrap { border-radius: 4px; padding: 0.6rem 0.85rem; }
       aside, .scrim { display: none; }
       main { padding: 1.5rem 1rem 6rem; }
       .bottom-nav {
@@ -268,8 +274,8 @@
         <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Search classes, digital products, teachers" />
       </div>
     </form>
-    <nav class="top-right">
-      {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
+    <nav class="top-right user-nav">
       <a class="top-link hide-m" href="{% url 'enrolled' %}">My Classes</a>
       <div class="user-menu">
         <button class="bell" id="bellBtn" aria-label="Notifications">
@@ -297,11 +303,12 @@
           <a class="menu-signout" href="{% url 'logout' %}">Sign out</a>
         </div>
       </div>
-      {% else %}
+    {% else %}
+    <nav class="top-right auth-nav">
       <a class="btn-login" href="{% url 'login' %}">Entrar</a>
       <a class="btn-signup" href="{% url 'signup' %}">Criar conta</a>
-      {% endif %}
     </nav>
+    {% endif %}
     </div>
   </header>
 
@@ -370,12 +377,12 @@
       {% endfor %}
     </main>
   </div>
+  {% if user.is_authenticated %}
   <nav class="bottom-nav">
     <a href="{% url 'landing' %}" class="{% if bottom == 'all' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       All
     </a>
-    {% if user.is_authenticated %}
     <a href="{% url 'enrolled' %}" class="{% if bottom == 'enrolled' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
       Enrolled
@@ -388,13 +395,8 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       Profile
     </a>
-    {% else %}
-    <a href="{% url 'login' %}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Entrar
-    </a>
-    {% endif %}
   </nav>
+  {% endif %}
   <script>
     (function () {
       var btn = document.getElementById('navToggle');
