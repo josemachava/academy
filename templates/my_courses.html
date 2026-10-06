@@ -243,7 +243,7 @@
         <div class="menu-card notif-card" id="bellCard" hidden>
           <div class="menu-title">Notifications</div>
           {% for n in notifications %}
-          <a class="notif-item" href="{% url 'course_detail' n.course_id %}">
+          <a class="notif-item" href="{% url 'classroom' n.course_id %}">
             <span class="notif-dot {{ n.kind }}"></span>
             <span><strong>{{ n.title }}</strong><em>{{ n.text }}</em><small>{{ n.when|timesince }} ago</small></span>
           </a>
@@ -286,7 +286,7 @@
       <div class="course-grid">
         {% for course in courses %}
         <article class="d-card grid-d">
-          <a class="d-cover {% cycle 'g0' 'g1' 'g2' 'g3' 'g4' %}" href="{% url 'course_detail' course.id %}">
+          <a class="d-cover {% cycle 'g0' 'g1' 'g2' 'g3' 'g4' %}" href="{% url 'classroom' course.id %}">
             <span>{{ course.emoji }}</span>
             {% if course.staff_pick %}<span class="d-staff">Staff Pick<i>.</i></span>{% endif %}
           </a>
@@ -294,7 +294,7 @@
             <span class="d-avatar">{{ course.instructor|slice:":1" }}</span>
             <span class="d-tinfo"><strong>{{ course.instructor }}</strong><em>{{ course.role }}</em></span>
           </div>
-          <a class="d-title" href="{% url 'course_detail' course.id %}">{{ course.title }}</a>
+          <a class="d-title" href="{% url 'classroom' course.id %}">{{ course.title }}</a>
           <div class="d-foot">
             <span class="d-meta"><b>{{ course.duration }}</b> · {{ course.lessons }} Lessons</span>
             <form method="post" action="{% url 'toggle_save' course.id %}">
@@ -345,11 +345,11 @@
   <nav class="bottom-nav">
     <a href="{% url 'landing' %}" class="{% if bottom == 'all' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      All
+      Explore
     </a>
     <a href="{% url 'enrolled' %}" class="{% if bottom == 'enrolled' %}active{% endif %}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      Enrolled
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Learn
     </a>
     <a href="{% url 'saved' %}" class="{% if bottom == 'saved' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>

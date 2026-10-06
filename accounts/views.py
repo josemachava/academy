@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
 from .forms import SignupForm, LoginForm
-from .models import Course, Enrollment, SavedCourse
+from .models import Course, Enrollment, SavedCourse, Lesson, LessonProgress
 
 
 CATEGORIES = [
@@ -39,6 +39,123 @@ def ensure_demo_courses():
         return
     for data in DEMO_COURSES:
         Course.objects.create(**data)
+    # lessons are created lazily per-course when classroom is opened
+
+
+def ensure_course_lessons(course):
+    # Heal legacy URLs (YouTube embeds or empty video for video-kind) to MP4 so JW Player can play them
+    _fix_samples = [
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    ]
+    legacy_yt = Lesson.objects.filter(course=course, video_url__contains="youtube.com/embed")
+    if legacy_yt.exists():
+        for i, ls in enumerate(legacy_yt.order_by("section_order", "order")):
+            ls.video_url = _fix_samples[i % len(_fix_samples)]
+            ls.save(update_fields=["video_url"])
+    legacy_empty = Lesson.objects.filter(course=course, kind="video", video_url="")
+    if legacy_empty.exists():
+        for i, ls in enumerate(legacy_empty.order_by("section_order", "order")):
+            ls.video_url = _fix_samples[i % len(_fix_samples)]
+            ls.save(update_fields=["video_url"])
+    if Lesson.objects.filter(course=course).exists():
+        return
+    # Build a Coursera-like curriculum derived from course metadata
+    total = course.lessons or 10
+    # Split into 3 sections
+    if total <= 6:
+        splits = [2, 2, total - 4]
+    elif total <= 9:
+        splits = [3, 3, total - 6]
+    else:
+        splits = [4, 4, total - 8]
+    splits = [s for s in splits if s > 0]
+    titles_by_course = {
+        "DaVinci": [
+            "Welcome & Workspace Overview", "Importing & Organizing Media", "Basic Cuts & Timeline Tricks",
+            "Color Page Fundamentals", "Nodes & Primary Correction", "Secondaries & Power Windows",
+            "Fairlight Audio Mix", "Fusion Titles & Effects", "Delivery & Export Presets",
+            "Project: Short Film Grade", "Review & Feedback Session", "Final Export & Portfolio"
+        ],
+        "Watercolor": [
+            "Materials & Paper Guide", "Mixing & Color Theory", "Sketching Lightly",
+            "First Wash Techniques", "Layering & Glazing", "Details & Texture",
+            "Flowers & Botanicals", "Landscape Elements", "Final Artwork Session", "Scan & Share Your Work"
+        ],
+        "Python API": [
+            "Project Setup & DRF Intro", "Models & Serializers", "ViewSets & Routing",
+            "Authentication with JWT", "Permissions & Throttling", "Filtering, Search & Pagination",
+            "Testing Your API", "Documentation with Swagger", "Deploying to Cloud",
+            "OAuth & Security Hardening", "Caching & Performance", "Capstone: Production API",
+            "CI/CD Pipeline", "Monitoring & Logs"
+        ],
+    }
+    # Pick a pool based on title keyword or fallback to generic
+    pool = None
+    for key, lst in titles_by_course.items():
+        if key.lower() in course.title.lower():
+            pool = lst
+            break
+    if pool is None:
+        pool = [
+            "Course Overview & Goals", "Setting Up Your Workspace", "Core Concepts Explained",
+            "Hands-on: First Exercise", "Deeper Dive & Best Practices", "Common Pitfalls",
+            "Guided Practice Session", "Peer Review & Feedback", "Advanced Techniques",
+            "Capstone Project Kickoff", "Build & Iterate", "Final Review & Next Steps",
+            "Bonus: Tips from the Instructor", "Resources & Further Learning",
+        ]
+    sections = [
+        ("Introduction & Foundations", "Get oriented and set up for success"),
+        ("Core Skills & Techniques", "Master the essential tools and workflows"),
+        ("Project & Mastery", "Apply everything in a real-world project"),
+    ]
+    # take as many sections as needed
+    sections = sections[:len(splits)]
+    # Generic durations rotation
+    durations = ["4:12", "6:45", "8:02", "5:33", "7:18", "10:04", "3:55", "12:20", "9:11", "6:00", "11:33", "14:05", "5:47", "8:50"]
+    kinds = ["video", "video", "video", "reading", "video", "video", "quiz"]
+    idx = 0
+    lesson_counter = 1
+    for sec_idx, count in enumerate(splits):
+        sec_title, sec_sub = sections[sec_idx]
+        for j in range(count):
+            title = pool[idx % len(pool)] if idx < len(pool) else f"Lesson {lesson_counter}: Deep Dive {lesson_counter}"
+            idx += 1
+            # JW Player needs a direct media file (MP4/HLS), not a YouTube embed.
+            # Rotate a few public sample MP4s so every video lesson has a playable source.
+            _samples = [
+                "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+            ]
+            is_video = not (lesson_counter % 5 == 0 and kinds[(lesson_counter - 1) % len(kinds)] != "video")
+            # Recompute kind first
+            kind_val = kinds[(lesson_counter - 1) % len(kinds)] if lesson_counter % 5 == 0 else "video"
+            is_video = kind_val == "video"
+            sample = _samples[(lesson_counter - 1) % len(_samples)]
+            Lesson.objects.create(
+                course=course,
+                section=sec_title,
+                section_order=sec_idx + 1,
+                title=title,
+                duration=durations[(lesson_counter - 1) % len(durations)],
+                order=j + 1,
+                kind=kind_val,
+                description=f"In this lesson you'll learn {title.lower()}. Follow along with the instructor and practice at your own pace. Resources and notes are available below the player.",
+                video_url=sample if is_video else "",
+            )
+            lesson_counter += 1
+
+
+def ensure_all_lessons():
+    ensure_demo_courses()
+    for c in Course.objects.all():
+        ensure_course_lessons(c)
 
 
 def landing_view(request):
@@ -233,27 +350,141 @@ def _time_left(duration, progress):
 
 @login_required
 def course_detail_view(request, course_id):
+    # Redirect old detail URL to the classroom (Coursera-style)
+    return redirect("classroom", course_id=course_id)
+
+
+@login_required
+def classroom_view(request, course_id, lesson_id=None):
     ensure_demo_courses()
     course = get_object_or_404(Course, pk=course_id)
+    ensure_course_lessons(course)
     course.tag_list_cached = course.tag_list()
+
     enrollment = Enrollment.objects.filter(user=request.user, course=course).first()
-    course.enrollment = enrollment
-    course.is_enrolled = enrollment is not None and enrollment.status == "enrolled"
-    course.is_completed = enrollment is not None and enrollment.status == "completed"
-    course.is_saved = SavedCourse.objects.filter(user=request.user, course=course).exists()
-    progress = enrollment.progress if enrollment else 0
+    # Auto-enroll on first classroom visit (Coursera allows preview, but we enroll silently)
+    if enrollment is None:
+        enrollment = Enrollment.objects.create(user=request.user, course=course, status="enrolled", progress=0)
+
+    lessons = list(Lesson.objects.filter(course=course).order_by("section_order", "order"))
+    # Build sections grouping
+    from collections import OrderedDict
+    sections_dict = OrderedDict()
+    for ls in lessons:
+        if ls.section not in sections_dict:
+            sections_dict[ls.section] = []
+        sections_dict[ls.section].append(ls)
+    sections = [{"title": k, "lessons": v} for k, v in sections_dict.items()]
+
+    # Current lesson selection
+    current = None
+    if lesson_id is not None:
+        current = next((l for l in lessons if l.id == lesson_id), None)
+        if current is None:
+            current = lessons[0] if lessons else None
+    else:
+        # try last unfinished, otherwise first
+        completed_ids = set(LessonProgress.objects.filter(user=request.user, lesson__course=course, completed=True).values_list("lesson_id", flat=True))
+        current = next((l for l in lessons if l.id not in completed_ids), lessons[0] if lessons else None)
+
+    # Progress calculation based on completed lessons
+    completed_ids = set(LessonProgress.objects.filter(user=request.user, lesson__course=course, completed=True).values_list("lesson_id", flat=True))
+    total = len(lessons) or 1
+    completed_count = len(completed_ids)
+    pct = int(round(completed_count / total * 100))
+
+    # Keep Enrollment.progress in sync
+    if enrollment and enrollment.progress != pct:
+        enrollment.progress = pct
+        if pct == 100 and enrollment.status != "completed":
+            enrollment.status = "completed"
+        elif pct < 100 and enrollment.status == "completed":
+            enrollment.status = "enrolled"
+        enrollment.save(update_fields=["progress", "status", "updated_at"])
+
+    # Prev/next navigation
+    cur_idx = lessons.index(current) if current and current in lessons else 0
+    prev_lesson = lessons[cur_idx - 1] if cur_idx > 0 else None
+    next_lesson = lessons[cur_idx + 1] if cur_idx + 1 < len(lessons) else None
+
+    # completed map
+    completed_map = {lid: True for lid in completed_ids}
+
     ctx = _course_context(request.user)
-    picks = [c for c in ctx["courses"] if c.id != course.id]
-    same = [c for c in picks if c.category == course.category]
-    others = [c for c in picks if c.category != course.category]
+    # hide sidebar categories in classroom? keep but not needed
     ctx.update({
         "course": course,
-        "progress": progress,
-        "time_left": _time_left(course.duration, progress),
-        "picks": (same + others)[:10],
+        "sections_data": sections,
+        "lessons": lessons,
+        "current": current,
+        "completed_ids": completed_ids,
+        "completed_map": completed_map,
+        "progress_pct": pct,
+        "completed_count": completed_count,
+        "total_lessons": total,
+        "prev_lesson": prev_lesson,
+        "next_lesson": next_lesson,
+        "enrollment": enrollment,
+        "is_saved": SavedCourse.objects.filter(user=request.user, course=course).exists(),
         "bottom": "all",
     })
-    return render(request, "course_detail.html", ctx)
+    return render(request, "classroom.html", ctx)
+
+
+@login_required
+@require_POST
+def toggle_lesson_complete(request, course_id, lesson_id):
+    """Legacy toggle — kept for backwards compat, now also supports auto-complete via fetch."""
+    lesson = get_object_or_404(Lesson, pk=lesson_id, course_id=course_id)
+    prog, created = LessonProgress.objects.get_or_create(user=request.user, lesson=lesson)
+    # toggle
+    if not created and prog.completed:
+        prog.completed = False
+        prog.save(update_fields=["completed", "updated_at"])
+    else:
+        prog.completed = True
+        prog.save(update_fields=["completed", "updated_at"])
+    lessons = Lesson.objects.filter(course_id=course_id)
+    total = lessons.count() or 1
+    done = LessonProgress.objects.filter(user=request.user, lesson__course_id=course_id, completed=True).count()
+    pct = int(round(done / total * 100))
+    enrollment = Enrollment.objects.filter(user=request.user, course_id=course_id).first()
+    if enrollment:
+        enrollment.progress = pct
+        enrollment.status = "completed" if pct == 100 else "enrolled"
+        enrollment.save(update_fields=["progress", "status", "updated_at"])
+    # JSON for fetch (auto-complete)
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest" or "application/json" in request.headers.get("Accept", ""):
+        from django.http import JsonResponse
+        return JsonResponse({"ok": True, "progress": pct, "completed": prog.completed, "total": total, "done": done})
+    nxt = request.POST.get("next_lesson")
+    if nxt:
+        return redirect("classroom_lesson", course_id=course_id, lesson_id=int(nxt))
+    return redirect("classroom_lesson", course_id=course_id, lesson_id=lesson_id)
+
+
+@login_required
+@require_POST
+def complete_lesson_auto(request, course_id, lesson_id):
+    """Idempotent auto-complete — marks lesson as completed, never un-completes. Used by JW Player on('complete')."""
+    lesson = get_object_or_404(Lesson, pk=lesson_id, course_id=course_id)
+    prog, created = LessonProgress.objects.get_or_create(user=request.user, lesson=lesson, defaults={"completed": True})
+    if not created and not prog.completed:
+        prog.completed = True
+        prog.save(update_fields=["completed", "updated_at"])
+    lessons = Lesson.objects.filter(course_id=course_id)
+    total = lessons.count() or 1
+    done = LessonProgress.objects.filter(user=request.user, lesson__course_id=course_id, completed=True).count()
+    pct = int(round(done / total * 100))
+    enrollment = Enrollment.objects.filter(user=request.user, course_id=course_id).first()
+    if enrollment:
+        enrollment.progress = pct
+        enrollment.status = "completed" if pct == 100 else "enrolled"
+        enrollment.save(update_fields=["progress", "status", "updated_at"])
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest" or "application/json" in request.headers.get("Accept", ""):
+        from django.http import JsonResponse
+        return JsonResponse({"ok": True, "progress": pct, "completed": True, "total": total, "done": done})
+    return redirect("classroom_lesson", course_id=course_id, lesson_id=lesson_id)
 
 
 @login_required

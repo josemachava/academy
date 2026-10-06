@@ -1,0 +1,409 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ course.title }} · Classroom · Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- JW Player — replace UN8K6XBn with your own library ID from https://dashboard.jwplayer.com -->
+  <script src="https://cdn.jwplayer.com/libraries/DbqSAfdn.js"></script>
+  <script src="https://ssl.p.jwpcdn.com/player/v/8.32.1/jwplayer.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#141414;--muted:#6e6e73;--border:#e8e8ea;--accent:#3b5bdb;--accent-hover:#2f49c9;--green:#00dd7d;--pill:#f1f1f3;--success:#15803d}
+    body{font-family:'Inter',-apple-system,'Segoe UI',sans-serif;background:#fff;color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    /* top bar */
+    .c-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;gap:1rem;padding:0 1.2rem}
+    .c-header a.back{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;text-decoration:none;color:var(--ink);white-space:nowrap}
+    .c-header a.back:hover{color:var(--accent)}
+    .c-header .sep{width:1px;height:22px;background:var(--border);flex-shrink:0}
+    .c-title{font-size:.92rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+    .c-header-right{margin-left:auto;display:flex;align-items:center;gap:1rem;flex-shrink:0}
+    .progress-mini{display:flex;align-items:center;gap:.6rem;font-size:.78rem;color:var(--muted)}
+    .progress-mini b{color:var(--ink)}
+    .mini-track{width:90px;height:4px;background:#e8e8ea;border-radius:3px;overflow:hidden}
+    .mini-fill{height:100%;background:var(--accent);border-radius:3px}
+    .avatar{width:30px;height:30px;border-radius:50%;background:#0099ff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;text-decoration:none}
+    .share-btn{font-size:.78rem;font-weight:600;border:1px solid var(--border);background:#fff;border-radius:6px;padding:.4rem .8rem;cursor:pointer}
+    .share-btn:hover{border-color:var(--ink)}
+    /* layout */
+    .classroom{display:flex;min-height:calc(100vh - 56px)}
+    /* left */
+    .cl-left{width:380px;flex-shrink:0;border-right:1px solid var(--border);background:#fff;display:flex;flex-direction:column;max-height:calc(100vh - 56px);position:sticky;top:56px;overflow:hidden}
+    .cl-left-head{padding:1.1rem 1.2rem .9rem;border-bottom:1px solid var(--border);flex-shrink:0}
+    .cl-left-head h2{font-size:1rem;font-weight:800}
+    .cl-left-head p{font-size:.78rem;color:var(--muted);margin-top:.2rem}
+    .cl-progress{margin-top:.7rem;display:flex;align-items:center;gap:.6rem}
+    .cl-track{flex:1;height:4px;background:#eee;border-radius:3px;overflow:hidden}
+    .cl-fill{height:100%;background:var(--accent)}
+    .cl-left-scroll{flex:1;overflow-y:auto}
+    .section{border-bottom:1px solid var(--border)}
+    .section-head{padding:.85rem 1.2rem .7rem;background:#fafafb;position:sticky;top:0}
+    .section-head strong{font-size:.84rem;font-weight:700}
+    .section-head span{font-size:.72rem;color:var(--muted);margin-left:.4rem}
+    .lesson{width:100%;display:flex;gap:.75rem;align-items:flex-start;padding:.75rem 1.2rem;text-align:left;background:#fff;border:none;border-left:3px solid transparent;cursor:pointer;text-decoration:none;color:inherit;font-family:inherit}
+    .lesson:hover{background:#f6f6f8}
+    .lesson.active{background:#eef2ff;border-left-color:var(--accent)}
+    .lesson-check{width:18px;height:18px;border-radius:50%;border:1.5px solid #c9c9cd;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;margin-top:1px}
+    .lesson.active .lesson-check{border-color:var(--accent);color:var(--accent)}
+    .lesson-check.done{background:var(--accent);border-color:var(--accent);color:#fff}
+    .lesson-icon{width:22px;height:22px;border-radius:4px;background:var(--pill);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;margin-top:1px}
+    .lesson.active .lesson-icon{background:#dbeafe}
+    .lesson-body{flex:1;min-width:0}
+    .lesson-title{font-size:.84rem;font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .lesson.active .lesson-title{color:var(--accent)}
+    .lesson-meta{font-size:.72rem;color:var(--muted);margin-top:.2rem;display:flex;gap:.5rem;align-items:center}
+    .dot{width:3px;height:3px;border-radius:50%;background:var(--muted)}
+    /* right */
+    .cl-right{flex:1;min-width:0;background:#f8f9fb;display:flex;flex-direction:column}
+    .player-wrap{background:#0b0b0f;padding:0}
+    .player{position:relative;aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .player #jwplayer{width:100%;height:100%;background:#000}
+    .player .jw-error{color:#fff;font-size:.85rem;padding:1rem;text-align:center}
+    .player-emoji{font-size:4.5rem;opacity:.9}
+    .player-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;background:radial-gradient(ellipse at center, rgba(0,0,0,.18), rgba(0,0,0,.45))}
+    .play-btn{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.95);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .play-btn:hover{transform:scale(1.03)}
+    .player-label{color:#fff;font-size:.82rem;font-weight:600;letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+    .concepts-card{margin-top:1.4rem;background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+    .concepts-card h4{font-size:.82rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+    .concepts-card ul{list-style:none;display:grid;gap:.6rem}
+    .concepts-card li{font-size:.86rem;line-height:1.5;display:flex;gap:.6rem;align-items:flex-start}
+    .concepts-card li::before{content:"✓";width:20px;height:20px;flex-shrink:0;border-radius:50%;background:#eef2ff;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;margin-top:.1rem}
+    .player-bar{height:44px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem;padding:0 1.2rem;flex-wrap:wrap}
+    .player-bar .crumb{font-size:.78rem;color:var(--muted)}
+    .player-bar .crumb b{color:var(--ink)}
+    .lesson-nav{margin-left:auto;display:flex;gap:.5rem}
+    .nav-btn{font-size:.78rem;font-weight:600;border:1px solid var(--border);background:#fff;border-radius:6px;padding:.4rem .8rem;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem}
+    .nav-btn:hover{border-color:var(--ink)}
+    .nav-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .nav-btn.primary:hover{background:var(--accent-hover)}
+    .nav-btn.disabled{opacity:.4;pointer-events:none}
+    /* content below player */
+    .cl-content{padding:1.6rem 2rem 3rem;max-width:900px}
+    .tabs{display:flex;gap:1.6rem;border-bottom:1px solid var(--border);margin-bottom:1.4rem;overflow-x:auto;scrollbar-width:none}
+    .tabs button{font-family:inherit;font-size:.85rem;font-weight:600;background:none;border:none;padding:.7rem 0 .85rem;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;color:var(--muted);margin-bottom:-1px}
+    .tabs button.active{color:var(--ink);border-bottom-color:var(--ink)}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+    .h3{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem}
+    .desc{font-size:.9rem;line-height:1.6;color:#2a2a2e}
+    .instructor-card{display:flex;gap:1rem;align-items:center;background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;margin-top:1.4rem}
+    .inst-avatar{width:44px;height:44px;border-radius:50%;background:#eef2ff;color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800}
+    .meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.4rem}
+    .meta-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:.9rem}
+    .meta-card small{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+    .meta-card strong{font-size:.9rem;display:block;margin-top:.2rem}
+    .complete-row{display:flex;align-items:center;gap:.8rem;background:#fff;border:1px solid var(--border);border-radius:8px;padding:.9rem 1rem;margin-top:1.6rem;justify-content:space-between}
+    .complete-badge{margin-left:auto;font-size:.78rem;font-weight:700;border:1px solid var(--border);background:#f6f6f8;color:var(--muted);border-radius:999px;padding:.35rem .85rem;white-space:nowrap}
+    .complete-badge.done{background:#ecfdf5;color:var(--success);border-color:#a7f3d0}
+    .check-btn{font-family:inherit;font-size:.82rem;font-weight:700;border-radius:6px;padding:.55rem 1rem;border:1px solid var(--border);background:#fff;cursor:pointer}
+    .check-btn.done{background:var(--success);color:#fff;border-color:var(--success)}
+    .check-btn:hover{border-color:var(--ink)}
+    .mobile-toggle{display:none}
+    .drawer-scrim{display:none}
+    .mobile-topbar{display:none}
+    @media(max-width:980px){
+      .c-header{height:52px; padding:0 .75rem; gap:.6rem; flex-wrap:nowrap}
+      .c-header a.back{display:none}
+      .c-header .sep{display:none}
+      .c-title{display:none}
+      .c-header-right{gap:.5rem}
+      .progress-mini{gap:.4rem; font-size:.72rem}
+      .progress-mini .mini-track{display:none}
+      .avatar{width:28px; height:28px; font-size:.7rem}
+      .mobile-toggle{display:inline-flex; align-items:center; gap:.45rem; font-size:.78rem; font-weight:700; border:1px solid var(--border); background:#fff; border-radius:8px; padding:.5rem .75rem; cursor:pointer; flex-shrink:0; white-space:nowrap}
+      .mobile-topbar{display:flex; align-items:center; justify-content:space-between; gap:.75rem; background:#fff; border-bottom:1px solid var(--border); padding:.7rem .9rem; position:sticky; top:0; z-index:5}
+      .mobile-topbar strong{font-size:.82rem; font-weight:800}
+      .mobile-topbar span{font-size:.72rem; color:var(--muted)}
+      .classroom{flex-direction:column}
+      .cl-left{width:100%; max-height:none; position:static; border-right:none; border-bottom:1px solid var(--border)}
+      .cl-left-scroll{max-height:52vh; -webkit-overflow-scrolling:touch}
+      .cl-left{position:fixed; top:52px; left:0; bottom:0; z-index:41; width:88%; max-width:380px; box-shadow:8px 0 24px rgba(0,0,0,.18); border-right:1px solid var(--border); transition:transform .28s cubic-bezier(.32,.72,0,1); will-change:transform}
+      .cl-left.collapsed{transform:translateX(-103%); display:flex}
+      .cl-left:not(.collapsed){transform:translateX(0)}
+      .cl-left-head{padding:.9rem 1rem .8rem}
+      .cl-left-head h2{font-size:.92rem}
+      .cl-left-head p{font-size:.72rem}
+      .drawer-scrim{display:block; position:fixed; inset:52px 0 0; background:rgba(15,17,25,.42); backdrop-filter:blur(2px); z-index:40}
+      .drawer-scrim[hidden]{display:none}
+      .section-head{padding:.75rem 1rem .6rem; font-size:.8rem}
+      .lesson{padding:.9rem 1rem; gap:.7rem; min-height:64px}
+      .lesson:active{background:#eef2ff}
+      .lesson-title{font-size:.84rem}
+      .lesson-meta{font-size:.68rem}
+      .player{aspect-ratio:16/9; min-height:208px}
+      .player-bar{height:auto; min-height:44px; padding:.55rem .75rem; gap:.5rem; align-items:flex-start}
+      .player-bar .crumb{font-size:.72rem; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; flex:1; min-width:0}
+      .lesson-nav{margin-left:0; width:100%; justify-content:space-between}
+      .nav-btn{flex:1; justify-content:center; padding:.6rem .6rem; font-size:.78rem; min-height:36px}
+      .nav-btn.primary{flex:1.1}
+      .cl-right{background:#fff}
+      .cl-content{padding:1rem .9rem calc(5rem + env(safe-area-inset-bottom)); max-width:none}
+      .tabs{gap:1.1rem; margin-bottom:1rem; scrollbar-width:none; -webkit-overflow-scrolling:touch}
+      .tabs button{font-size:.82rem; padding:.65rem 0 .75rem}
+      .h3{font-size:1.05rem; line-height:1.3}
+      .desc{font-size:.86rem}
+      .instructor-card{padding:.85rem .9rem; gap:.75rem}
+      .inst-avatar{width:38px; height:38px; font-size:.85rem}
+      .meta-grid{grid-template-columns:1fr; gap:.7rem}
+      .meta-card{padding:.8rem}
+      .complete-row{position:sticky; bottom:0; margin:1.2rem -.9rem 0; border-radius:0; border-left:none; border-right:none; border-bottom:none; padding: .85rem .9rem calc(.85rem + env(safe-area-inset-bottom)); background:rgba(255,255,255,.96); backdrop-filter:blur(8px); box-shadow:0 -4px 16px rgba(0,0,0,.07); z-index:6}
+      .complete-row span{font-size:.84rem}
+      .check-btn{padding:.65rem 1.1rem; min-height:40px}
+    }
+    @media(max-width:480px){
+      .c-title{-webkit-line-clamp:1}
+      .cl-left{width:92%; max-width:none}
+      .player-bar .crumb{-webkit-line-clamp:1}
+      .tabs{gap:.9rem}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .cl-left{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <header class="c-header">
+    <a class="back" href="{% url 'landing' %}">← Back to Catalog</a>
+    <span class="sep"></span>
+    <span class="c-title">{{ course.emoji }} {{ course.title|truncatechars:64 }}</span>
+    <button class="mobile-toggle" id="drawerToggle" type="button">☰ Course content</button>
+    <div class="c-header-right">
+      <span class="progress-mini"><span class="mini-track"><span class="mini-fill" style="width:{{ progress_pct }}%"></span></span> <b>{{ progress_pct }}%</b> complete</span>
+      <a class="avatar" href="{% url 'profile' %}">{{ user.first_name.0|default:"A" }}{{ user.last_name.0 }}</a>
+    </div>
+  </header>
+
+  <div class="classroom">
+    <aside class="cl-left collapsed" id="clLeft">
+      <div class="cl-left-head">
+        <h2>Course content</h2>
+        <p>{{ completed_count }} of {{ total_lessons }} lessons completed · {{ course.duration }} total</p>
+        <div class="cl-progress"><span class="cl-track"><span class="cl-fill" style="width:{{ progress_pct }}%"></span></span><span style="font-size:.78rem;font-weight:700">{{ progress_pct }}%</span></div>
+      </div>
+      <div class="cl-left-scroll">
+        {% for sec in sections_data %}
+        <div class="section">
+          <div class="section-head"><strong>{{ forloop.counter }}. {{ sec.title }}</strong> <span>· {{ sec.lessons|length }} lessons</span></div>
+          {% for ls in sec.lessons %}
+          <a class="lesson {% if current and ls.id == current.id %}active{% endif %}" href="{% url 'classroom_lesson' course.id ls.id %}">
+            <span class="lesson-check {% if ls.id in completed_ids %}done{% endif %}">{% if ls.id in completed_ids %}✓{% else %}{% if current and ls.id == current.id %}▶{% endif %}{% endif %}</span>
+            <span class="lesson-icon">{% if ls.kind == 'video' %}▶{% elif ls.kind == 'reading' %}≡{% else %}?{% endif %}</span>
+            <span class="lesson-body">
+              <span class="lesson-title">{{ ls.title }}</span>
+              <span class="lesson-meta"><span>{{ ls.duration }}</span><span class="dot"></span><span style="text-transform:capitalize">{{ ls.kind }}</span>{% if ls.kind == 'video' and ls.video_url %}<span class="dot"></span><span>Video</span>{% endif %}</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+    </aside>
+    <div class="drawer-scrim" id="scrim" hidden></div>
+
+    <section class="cl-right">
+      <div class="player-wrap">
+        <div class="player" id="playerMount">
+          <div id="jwplayer"></div>
+          <div id="jwFallback" hidden style="width:100%;height:100%"></div>
+        </div>
+        <div class="player-bar">
+          <span class="crumb">{{ current.section|default:"Course" }} <span style="opacity:.5">›</span> <b>{{ current.title|default:course.title }}</b></span>
+          <span class="lesson-nav">
+            {% if prev_lesson %}<a class="nav-btn" href="{% url 'classroom_lesson' course.id prev_lesson.id %}">← Previous</a>{% else %}<span class="nav-btn disabled">← Previous</span>{% endif %}
+            {% if next_lesson %}<a class="nav-btn primary" href="{% url 'classroom_lesson' course.id next_lesson.id %}">Next →</a>{% else %}<span class="nav-btn disabled">Next →</span>{% endif %}
+          </span>
+        </div>
+      </div>
+
+      <div class="cl-content">
+        <div class="tabs" role="tablist">
+          <button class="active" data-tab="overview">Overview</button>
+          <button data-tab="notes">Notes</button>
+          <button data-tab="resources">Resources</button>
+          <button data-tab="transcript">Transcript</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-overview">
+          <h1 class="h3">{{ current.title|default:course.title }}</h1>
+          <p class="desc">{{ current.description|default:"Welcome to this lesson. Watch the video on the right (player) and use the course content on the left to navigate — just like Coursera. Mark lessons complete to track your progress." }}</p>
+
+          <div class="instructor-card">
+            <span class="inst-avatar">{{ course.instructor|slice:":1" }}</span>
+            <span><strong style="font-size:.92rem">{{ course.instructor }}</strong><br/><span style="font-size:.8rem;color:var(--muted)">{{ course.role }} · {{ course.category }}</span></span>
+            <span style="margin-left:auto;font-size:.78rem;color:var(--muted)">{{ course.rating }} ★ · {{ course.students }} students</span>
+          </div>
+
+          <div class="meta-grid">
+            <div class="meta-card"><small>Duration</small><strong>{{ current.duration|default:course.duration }}</strong></div>
+            <div class="meta-card"><small>Level</small><strong style="text-transform:capitalize">{{ course.level }}</strong></div>
+            <div class="meta-card"><small>Lessons</small><strong>{{ total_lessons }} lessons</strong></div>
+          </div>
+
+          <div class="concepts-card">
+            <h4>Core concepts</h4>
+            <ul>
+              {% for sec in sections_data|slice:":3" %}
+                {% for ls in sec.lessons|slice:":2" %}
+                <li>{{ ls.title }}</li>
+                {% endfor %}
+              {% endfor %}
+              {% if course.tag_list_cached %}
+                {% for t in course.tag_list_cached|slice:":3" %}
+                <li>{{ t }}</li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+
+          <div class="complete-row" id="completeRow" data-complete-url="{% url 'complete_lesson' course.id current.id %}" data-lesson-id="{{ current.id }}" data-completed="{% if current.id in completed_ids %}1{% else %}0{% endif %}">
+            <span id="completeText" style="font-size:.9rem;font-weight:600">{% if current and current.id in completed_ids %}Completed ✓ — automatically marked{% else %}Watch to the end to complete automatically{% endif %}</span>
+            <span id="completeBadge" class="complete-badge {% if current.id in completed_ids %}done{% endif %}">{% if current.id in completed_ids %}✓ Done{% else %}In progress{% endif %}</span>
+            <span id="csrfHolder" data-token="{{ csrf_token }}" hidden></span>
+          </div>
+
+          {% if course.tag_list_cached %}
+          <p style="margin-top:1.2rem;font-size:.82rem;color:var(--muted)">Tags: {% for t in course.tag_list_cached %}<span style="background:var(--pill);padding:.2rem .5rem;border-radius:999px;margin-right:.3rem">{{ t }}</span>{% endfor %}</p>
+          {% endif %}
+        </div>
+        <div class="tab-panel" id="tab-notes"><p class="desc">Take notes here — your notes are private to you. (Demo: notes persist in your browser for now.)</p><textarea style="width:100%;margin-top:.8rem;min-height:140px;border:1px solid var(--border);border-radius:8px;padding:.8rem;font-family:inherit;font-size:.9rem" placeholder="Write your notes for this lesson..."></textarea></div>
+        <div class="tab-panel" id="tab-resources"><p class="desc">Downloadable resources for this lesson will appear here.</p><ul style="margin-top:.8rem;font-size:.9rem;line-height:1.7"><li>Lesson slides (PDF)</li><li>Starter files &amp; links from description</li><li>Community discussion</li></ul></div>
+        <div class="tab-panel" id="tab-transcript"><p class="desc">Auto-generated transcript for <b>{{ current.title }}</b> will appear here. Follow along while the video plays.</p><p class="desc" style="margin-top:.8rem;color:var(--muted)">[Demo transcript] Welcome! In this lesson we cover {{ current.title|lower }} — pause the player and try it yourself, then mark complete on the right to continue.</p></div>
+      </div>
+    </section>
+  </div>
+
+<script>
+(function(){
+  // ---- Auto-complete helpers (no button) ----
+  function getCsrf(){
+    var el=document.getElementById('csrfHolder');
+    if(el && el.dataset.token) return el.dataset.token;
+    var m=document.cookie.match(/(?:^|; )csrftoken=([^;]*)/);
+    return m ? decodeURIComponent(m[1]) : "";
+  }
+  function updateProgressUI(pct, done, total){
+    document.querySelectorAll('.mini-fill').forEach(function(e){ e.style.width=pct+'%'; });
+    document.querySelectorAll('.mini-fill').forEach(function(e){ var b=e.closest('.progress-mini'); if(b){ var t=b.querySelector('b'); if(t) t.textContent=pct+'%'; }});
+    document.querySelectorAll('.cl-fill').forEach(function(e){ e.style.width=pct+'%'; });
+    var pctText=document.querySelector('.cl-progress span:last-child');
+    if(pctText) pctText.textContent=pct+'%';
+    var headP=document.querySelector('.cl-left-head p');
+    if(headP) headP.textContent=done+' of '+total+' lessons completed · {{ course.duration }} total';
+  }
+  var row=document.getElementById('completeRow');
+  var badge=document.getElementById('completeBadge');
+  var text=document.getElementById('completeText');
+  var _autoDone=false;
+  function markAutoComplete(){
+    if(!row) return;
+    if(row.dataset.completed==="1" || _autoDone) return;
+    _autoDone=true;
+    var url=row.dataset.completeUrl;
+    fetch(url, {method:'POST', headers:{'X-CSRFToken':getCsrf(), 'X-Requested-With':'XMLHttpRequest', 'Accept':'application/json'}, credentials:'same-origin'})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d.ok) return;
+      row.dataset.completed="1";
+      if(text) text.textContent='Completed ✓ — automatically marked';
+      if(badge){ badge.textContent='✓ Done'; badge.classList.add('done'); }
+      updateProgressUI(d.progress, d.done, d.total);
+      // left nav check
+      var curId=row.dataset.lessonId;
+      var link=document.querySelector('.lesson.active .lesson-check');
+      if(link){ link.classList.add('done'); link.textContent='✓'; }
+    })
+    .catch(function(){ _autoDone=false; });
+  }
+
+  // ---- JW Player (right side) ----
+  var jwVideo = "{{ current.video_url|escapejs }}";
+  var jwTitle = "{{ current.title|escapejs }}";
+  var jwKind  = "{{ current.kind|escapejs }}";
+  var jwPoster = "";
+  var jwEl = document.getElementById('jwplayer');
+  var fbEl = document.getElementById('jwFallback');
+  var _html5Attached=false;
+  function attachHtml5FallbackListeners(){
+    if(_html5Attached) return;
+    var v=document.getElementById('html5fallback');
+    if(!v) return;
+    _html5Attached=true;
+    v.addEventListener('ended', markAutoComplete);
+    var _fired90=false;
+    v.addEventListener('timeupdate', function(){
+      if(_fired90) return;
+      if(v.duration && v.currentTime / v.duration >= 0.9){ _fired90=true; markAutoComplete(); }
+    });
+  }
+  function showFallbackVideo(src){
+    if(!src) return;
+    fbEl.hidden = false;
+    fbEl.innerHTML = '<video id="html5fallback" controls playsinline style="width:100%;height:100%;background:#000" poster="'+jwPoster+'" src="'+src+'"></video>';
+    setTimeout(attachHtml5FallbackListeners, 80);
+  }
+  if(jwKind !== 'video' || !jwVideo){
+    // Reading/Quiz — keep JW Player mount visible (no card), auto-complete after dwell
+    // Do not hide player; core concepts are shown below in .concepts-card
+    if(row && row.dataset.completed!=="1"){
+      setTimeout(markAutoComplete, 4000);
+    }
+    // Show a subtle placeholder inside player when no video source
+    if(jwEl && !jwVideo){
+      jwEl.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;color:#fff;font-size:.82rem;opacity:.7">Reading lesson — see Core concepts below</div>';
+    }
+  } else if(typeof jwplayer !== 'undefined'){
+    try{
+      if(!jwplayer.key){ try{ jwplayer.key = "ITWMv7t88c1N6Yb3V3nR9u6l6l2l1p4c"; }catch(e){} }
+      jwplayer("jwplayer").setup({
+        file: jwVideo,
+        title: jwTitle,
+        width: "100%",
+        aspectratio: "16:9",
+        autostart: false,
+        controls: true,
+        displaytitle: true,
+        displaydescription: false,
+        playbackRateControls: [0.5,0.75,1,1.25,1.5,1.75,2],
+        preload: "metadata"
+      });
+      var _jw90=false;
+      jwplayer("jwplayer").on('time', function(e){
+        if(_jw90) return;
+        if(e.duration && e.position / e.duration >= 0.9){ _jw90=true; markAutoComplete(); }
+      });
+      jwplayer("jwplayer").on('complete', markAutoComplete);
+      jwplayer("jwplayer").on('error', function(){ showFallbackVideo(jwVideo); });
+    }catch(e){
+      showFallbackVideo(jwVideo);
+    }
+  } else {
+    showFallbackVideo(jwVideo);
+  }
+
+  var left=document.getElementById('clLeft'),toggle=document.getElementById('drawerToggle'),scrim=document.getElementById('scrim');
+  function open(){left.classList.remove('collapsed');if(scrim)scrim.hidden=false}
+  function close(){left.classList.add('collapsed');if(scrim)scrim.hidden=true}
+  if(toggle)toggle.addEventListener('click',function(){left.classList.contains('collapsed')?open():close()});
+  if(scrim)scrim.addEventListener('click',close);
+  // tabs
+  document.querySelectorAll('.tabs button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.tabs button').forEach(function(b){b.classList.remove('active')});
+      document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+      btn.classList.add('active');
+      var id='tab-'+btn.getAttribute('data-tab');
+      var el=document.getElementById(id);
+      if(el) el.classList.add('active');
+    });
+  });
+  // auto-open drawer on desktop
+  if(window.innerWidth>980){left.classList.remove('collapsed')}
+})();
+</script>
+</body>
+</html>

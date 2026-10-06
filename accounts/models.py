@@ -99,3 +99,40 @@ class SavedCourse(models.Model):
 
     def __str__(self):
         return f"{self.user} saved {self.course}"
+
+
+class Lesson(models.Model):
+    KIND_CHOICES = [
+        ("video", "Video"),
+        ("reading", "Reading"),
+        ("quiz", "Quiz"),
+    ]
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="lesson_items")
+    section = models.CharField(max_length=200, default="Module 1")
+    section_order = models.PositiveIntegerField(default=1)
+    title = models.CharField(max_length=255)
+    duration = models.CharField(max_length=20, default="5:00")
+    order = models.PositiveIntegerField(default=1)
+    kind = models.CharField(max_length=20, choices=KIND_CHOICES, default="video")
+    video_url = models.URLField(blank=True, default="")
+    description = models.TextField(blank=True, default="")
+
+    class Meta:
+        ordering = ["section_order", "order"]
+        unique_together = ("course", "section_order", "order")
+
+    def __str__(self):
+        return f"{self.course.title} — {self.section}: {self.title}"
+
+
+class LessonProgress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="lesson_progress")
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="progress")
+    completed = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("user", "lesson")
+
+    def __str__(self):
+        return f"{self.user} — {self.lesson.title} ({'done' if self.completed else 'todo'})"
