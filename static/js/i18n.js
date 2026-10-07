@@ -75,7 +75,18 @@
       'profile.saved': 'Guardado',
       'profile.signout': 'Terminar sessão',
       'profile.language': 'Idioma',
-      'profile.languageHint': 'Escolha o idioma do site'
+      'profile.languageHint': 'Escolha o idioma do site',
+      // new Kutiva footer (footer.png)
+      'footer.podcasts': 'Ouça Nossos Podcasts',
+      'footer.nanodegrees': 'Nanodegrees',
+      'footer.programas': 'Programas',
+      'footer.sobre': 'Sobre',
+      'footer.comunidade': 'Comunidade',
+      'footer.contacto': 'Contacto',
+      'footer.direitos': 'Direitos Autorais',
+      'footer.privacidade': 'Politica de privacidade',
+      'footer.termos': 'Termos e condições',
+      'footer.copy': 'Kutiva 2022. Todos os direitos reservados'
     },
     en: {
       'landing.nav.courses': 'COURSES',
@@ -148,7 +159,17 @@
       'profile.saved': 'Saved',
       'profile.signout': 'Sign out',
       'profile.language': 'Language',
-      'profile.languageHint': 'Choose site language'
+      'profile.languageHint': 'Choose site language',
+      'footer.podcasts': 'Listen to Our Podcasts',
+      'footer.nanodegrees': 'Nanodegrees',
+      'footer.programas': 'Programs',
+      'footer.sobre': 'About',
+      'footer.comunidade': 'Community',
+      'footer.contacto': 'Contact',
+      'footer.direitos': 'Copyright',
+      'footer.privacidade': 'Privacy Policy',
+      'footer.termos': 'Terms and Conditions',
+      'footer.copy': 'Kutiva 2022. All rights reserved'
     }
   };
   function applyLang(lang){
