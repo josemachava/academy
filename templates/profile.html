@@ -157,6 +157,12 @@
     .profile-stats span { font-size: 0.75rem; color: var(--muted); }
     .profile-signout { display: block; background: var(--accent); color: #fff; font-weight: 700; font-size: 0.875rem; text-decoration: none; border-radius: 6px; padding: 0.65rem; }
     .profile-signout:hover { background: var(--accent-hover); }
+    .lang-card { max-width: 460px; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.5rem; margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .lang-card strong { font-size: 0.9rem; }
+    .lang-card span { font-size: 0.78rem; color: var(--muted); }
+    .lang-switch { display: flex; gap: 2px; background: #f3f4f6; border: 1px solid var(--border); border-radius: 999px; padding: 2px; }
+    .lang-switch button { border: 1px solid transparent; background: transparent; font: 700 0.62rem 'Inter', sans-serif; letter-spacing: 0.04em; padding: 5px 10px; border-radius: 999px; cursor: pointer; color: var(--muted); }
+    .lang-switch button.active { background: #fff; color: #0f172a; border-color: var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
     .empty-state h3 { font-size: 1.05rem; margin-bottom: 0.4rem; }
     .empty-state p { color: var(--muted); font-size: 0.875rem; }
 
@@ -261,37 +267,47 @@
     </aside>
 
     <main>
-      <h1 class="page-title">Profile</h1>
+      <h1 class="page-title" data-i18n="profile.title">Perfil</h1>
       <div class="profile-card">
         <div class="profile-avatar">{{ user.first_name.0|default:"A" }}{{ user.last_name.0 }}</div>
         <div class="profile-name">{{ user.get_full_name }}</div>
         <div class="profile-email">{{ user.email }}</div>
-        <div class="profile-meta">Member since {{ user.date_joined|date:"F Y" }}</div>
+        <div class="profile-meta"><span data-i18n="profile.memberSince">Membro desde</span> {{ user.date_joined|date:"F Y" }}</div>
         <div class="profile-stats">
-          <a href="{% url 'enrolled' %}"><strong>{{ enrolled_count|default:0 }}</strong><span>Enrolled</span></a>
-          <a href="{% url 'completed' %}"><strong>{{ completed_count|default:0 }}</strong><span>Completed</span></a>
-          <a href="{% url 'saved' %}"><strong>{{ saved_count|default:0 }}</strong><span>Saved</span></a>
+          <a href="{% url 'enrolled' %}"><strong>{{ enrolled_count|default:0 }}</strong><span data-i18n="profile.enrolled">Inscrito</span></a>
+          <a href="{% url 'completed' %}"><strong>{{ completed_count|default:0 }}</strong><span data-i18n="profile.completed">Concluído</span></a>
+          <a href="{% url 'saved' %}"><strong>{{ saved_count|default:0 }}</strong><span data-i18n="profile.saved">Guardado</span></a>
         </div>
-        <a class="profile-signout" href="{% url 'logout' %}">Sign out</a>
+        <a class="profile-signout" href="{% url 'logout' %}" data-i18n="profile.signout">Terminar sessão</a>
+      </div>
+      <div class="lang-card">
+        <div>
+          <strong data-i18n="profile.language">Idioma</strong><br>
+          <span data-i18n="profile.languageHint">Escolha o idioma do site</span>
+        </div>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="pt" class="active">PT</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
       </div>
     </main>
   </div>
   <nav class="bottom-nav">
     <a href="{% url 'landing' %}" class="{% if bottom == 'all' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Explore
+      <span data-i18n="dash.explore">Explore</span>
     </a>
     <a href="{% url 'enrolled' %}" class="{% if bottom == 'enrolled' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      Learn
+      <span data-i18n="dash.learn">Learn</span>
     </a>
     <a href="{% url 'saved' %}" class="{% if bottom == 'saved' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-      Saved
+      <span data-i18n="dash.saved">Saved</span>
     </a>
     <a href="{% url 'profile' %}" class="{% if bottom == 'profile' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Profile
+      <span data-i18n="dash.profile">Profile</span>
     </a>
   </nav>
   <script>
@@ -323,5 +339,6 @@
       }
     })();
   </script>
+  <script src="{% static 'js/i18n.js' %}"></script>
 </body>
 </html>

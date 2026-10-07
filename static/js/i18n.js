@@ -66,7 +66,16 @@
       'footer.noaccount': 'Não tem uma conta?',
       'footer.signup': 'Criar conta agora',
       'footer.hasaccount': 'Já tem uma conta?',
-      'footer.signin': 'Iniciar sessão'
+      'footer.signin': 'Iniciar sessão',
+      // profile
+      'profile.title': 'Perfil',
+      'profile.memberSince': 'Membro desde',
+      'profile.enrolled': 'Inscrito',
+      'profile.completed': 'Concluído',
+      'profile.saved': 'Guardado',
+      'profile.signout': 'Terminar sessão',
+      'profile.language': 'Idioma',
+      'profile.languageHint': 'Escolha o idioma do site'
     },
     en: {
       'landing.nav.courses': 'COURSES',
@@ -131,7 +140,15 @@
       'footer.noaccount': "Don't have an account?",
       'footer.signup': 'Sign Up Now',
       'footer.hasaccount': 'Already have an account?',
-      'footer.signin': 'Sign In'
+      'footer.signin': 'Sign In',
+      'profile.title': 'Profile',
+      'profile.memberSince': 'Member since',
+      'profile.enrolled': 'Enrolled',
+      'profile.completed': 'Completed',
+      'profile.saved': 'Saved',
+      'profile.signout': 'Sign out',
+      'profile.language': 'Language',
+      'profile.languageHint': 'Choose site language'
     }
   };
   function applyLang(lang){
