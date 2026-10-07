@@ -60,28 +60,6 @@
       <p data-i18n="page.terms.p4">Podemos atualizar estes termos. A versão vigente estará sempre nesta página com data de atualização: {% now "d/m/Y" %}.</p>
     </div>
   </div>
-  <footer class="kutiva-footer">
-    <div class="wrap">
-      <div class="foot-main">
-        <div class="foot-podcasts">
-          <h3>{% if footer_podcast %}{{ footer_podcast.heading|linebreaksbr }}{% else %}<span data-i18n="footer.podcasts">Ouça Nossos<br>Podcasts</span>{% endif %}</h3>
-          <a href="{% if footer_podcast and footer_podcast.spotify_url %}{{ footer_podcast.spotify_url }}{% else %}https://open.spotify.com{% endif %}" target="_blank" rel="noopener" class="spotify-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.52 17.3a1.02 1.02 0 01-1.4.42c-3.83-2.34-8.66-2.87-14.33-1.57a1.02 1.02 0 01-.46-1.98c6.17-1.41 11.66-.86 16 1.72.48.31.64.96.33 1.44l-.14-.03zm2.1-4.23a1.26 1.26 0 01-1.75.51c-4.38-2.69-11.06-3.47-16.24-1.9a1.26 1.26 0 11-.74-2.42c5.93-1.81 13.5-.98 18.59 2.18.6.38.8 1.19.42 1.79l-.28-.16zm.18-4.4c-5.25-3.12-13.91-3.41-18.91-1.87a1.51 1.51 0 11-.88-2.89c5.76-1.77 15.47-1.42 21.6 2.16a1.51 1.51 0 01-.81 2.76v-.16z"/></svg>Spotify</a><br>
-          <a href="{% if footer_podcast and footer_podcast.google_podcasts_url %}{{ footer_podcast.google_podcasts_url }}{% else %}https://podcasts.google.com{% endif %}" target="_blank" rel="noopener" class="gpod-badge"><span class="dots"><span></span><span></span><span></span><span></span></span>Google Podcasts</a>
-        </div>
-        {% if footer_columns %}{% for col in footer_columns %}<div class="foot-col"><h4>{{ col.title }}</h4>{% for link in col.links.all %}<a href="{{ link.url }}">{{ link.title }}</a>{% endfor %}</div>{% endfor %}{% else %}
-        <div class="foot-col"><h4>Nanodegrees</h4><a href="#">FullStack</a><a href="#">Frontend</a><a href="#">React Native</a><a href="#">DevOps</a><a href="#">Wordpress</a><a href="#">USSD</a></div>
-        <div class="foot-col"><h4>Programas</h4><a href="#">Kutiva On Air</a><a href="#">Developers Abroad</a><a href="#">Comunidade</a></div>
-        <div class="foot-col"><h4>Sobre</h4><a href="{% url 'contact' %}">Contacto</a><a href="{% url 'copyright' %}">Direitos</a><a href="{% url 'privacy' %}">Privacidade</a><a href="{% url 'terms' %}">Termos</a></div>
-        {% endif %}
-      </div>
-      <div class="foot-sep"></div>
-      <div class="foot-bottom">
-        <div class="foot-social">{% if footer_socials %}{% for s in footer_socials %}<a href="{{ s.url }}">{{ s.platform }}</a>{% endfor %}{% else %}<a href="#">f</a><a href="#">g</a><a href="#">t</a><a href="#">y</a>{% endif %}</div>
-        <div class="foot-copy">Kutiva {% now "Y" %}. <span data-i18n="footer.copy_suffix">{% if footer_settings and footer_settings.copyright_text %}{{ footer_settings.copyright_text }}{% else %}Todos os direitos reservados{% endif %}</span></div>
-        <a href="#" class="foot-top">^</a>
-      </div>
-    </div>
-  </footer>
-  <script src="{% static 'js/i18n.js' %}"></script>
+<script src="{% static 'js/i18n.js' %}"></script>
 </body>
 </html>
