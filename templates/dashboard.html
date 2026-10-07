@@ -47,6 +47,9 @@
     .search-wrap input { flex: 1; min-width: 0; background: transparent; border: none; outline: none; color: var(--ink); font-family: inherit; font-size: 0.85rem; }
     .search-wrap input::placeholder { color: var(--muted); }
     .top-right { margin-left: auto; display: flex; align-items: center; gap: 1.1rem; }
+    .lang-switch { display: flex; gap: 2px; background: #f3f4f6; border: 1px solid var(--border); border-radius: 999px; padding: 2px; }
+    .lang-switch button { border: 1px solid transparent; background: transparent; font: 700 0.62rem 'Inter', sans-serif; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 999px; cursor: pointer; color: var(--muted); }
+    .lang-switch button.active { background: #fff; color: #0f172a; border-color: var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
     .btn-login { font-size: 0.8rem; font-weight: 700; color: var(--ink); text-decoration: none; white-space: nowrap; }
     .btn-login:hover { color: var(--accent); }
     .btn-signup { font-size: 0.8rem; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 0.5rem 1rem; text-decoration: none; white-space: nowrap; }
@@ -267,30 +270,34 @@
     <div class="header-inner">
     <button class="hamburger" id="navToggle" aria-label="Open menu">☰</button>
     <a class="logo" href="{% url 'landing' %}"><img src="{% static 'images/logo.png' %}" alt="Academy"></a>
-    <a class="top-link hide-m" href="{% url 'landing' %}">Creative Feed</a>
+    <a class="top-link hide-m" href="{% url 'landing' %}" data-i18n="dash.mycourses">Creative Feed</a>
     <form class="search-form" method="get" action="{% url 'landing' %}">
       <div class="search-wrap">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Search classes, digital products, teachers" />
+        <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Pesquisar aulas, produtos digitais, professores" data-i18n-placeholder="dash.search.placeholder" />
       </div>
     </form>
+    <div class="lang-switch" role="group" aria-label="Language" style="margin-left:auto;">
+      <button type="button" data-lang="pt" class="active">PT</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
     {% if user.is_authenticated %}
     <nav class="top-right user-nav">
-      <a class="top-link hide-m" href="{% url 'enrolled' %}">My Classes</a>
+      <a class="top-link hide-m" href="{% url 'enrolled' %}" data-i18n="dash.mycourses">My Classes</a>
       <div class="user-menu">
         <button class="bell" id="bellBtn" aria-label="Notifications">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           {% if notif_count %}<span class="bell-dot">{{ notif_count }}</span>{% endif %}
         </button>
         <div class="menu-card notif-card" id="bellCard" hidden>
-          <div class="menu-title">Notifications</div>
+          <div class="menu-title" data-i18n="dash.notification.title">Notifications</div>
           {% for n in notifications %}
           <a class="notif-item" href="{% url 'classroom' n.course_id %}">
             <span class="notif-dot {{ n.kind }}"></span>
             <span><strong>{{ n.title }}</strong><em>{{ n.text }}</em><small>{{ n.when|timesince }} ago</small></span>
           </a>
           {% empty %}
-          <div class="notif-empty">No notifications yet.</div>
+          <div class="notif-empty" data-i18n="dash.notification.empty">No notifications yet.</div>
           {% endfor %}
         </div>
       </div>
@@ -300,13 +307,13 @@
           <div class="menu-name">{{ user.get_full_name }}</div>
           <div class="menu-email">{{ user.email }}</div>
           <div class="menu-sep"></div>
-          <a class="menu-signout" href="{% url 'logout' %}">Sign out</a>
+          <a class="menu-signout" href="{% url 'logout' %}" data-i18n="dash.signout">Sign out</a>
         </div>
       </div>
     {% else %}
     <nav class="top-right auth-nav">
-      <a class="btn-login" href="{% url 'login' %}">Entrar</a>
-      <a class="btn-signup" href="{% url 'signup' %}">Criar conta</a>
+      <a class="btn-login" href="{% url 'login' %}" data-i18n="dash.signin">Entrar</a>
+      <a class="btn-signup" href="{% url 'signup' %}" data-i18n="dash.signup">Criar conta</a>
     </nav>
     {% endif %}
     </div>
@@ -315,7 +322,7 @@
   <div class="layout">
     <button class="scrim" id="navScrim" hidden aria-label="Close menu"></button>
     <aside id="sidebar">
-      <a class="side-link strong {% if not active_category %}active{% endif %}" href="{% url 'landing' %}">All Classes</a>
+      <a class="side-link strong {% if not active_category %}active{% endif %}" href="{% url 'landing' %}" data-i18n="dash.allclasses">All Classes</a>
       {% for cat in categories %}
       <a class="side-link {% if active_category == cat %}active{% endif %}" href="{% url 'landing' %}?category={{ cat|urlencode }}">{{ cat }}</a>
       {% endfor %}
@@ -363,16 +370,16 @@
           </article>
           {% empty %}
           <div class="empty-state">
-            <h3>No classes found</h3>
-            <p>Try a different search or category.</p>
+            <h3 data-i18n="dash.noclasses">No classes found</h3>
+            <p data-i18n="dash.noclasses.sub">Try a different search or category.</p>
           </div>
           {% endfor %}
         </div>
       </section>
       {% empty %}
       <div class="empty-state">
-        <h3>No classes found</h3>
-        <p>Try a different search or category.</p>
+        <h3 data-i18n="dash.noclasses">No classes found</h3>
+        <p data-i18n="dash.noclasses.sub">Try a different search or category.</p>
       </div>
       {% endfor %}
     </main>
@@ -381,19 +388,19 @@
   <nav class="bottom-nav">
     <a href="{% url 'landing' %}" class="{% if bottom == 'all' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Explore
+      <span data-i18n="dash.explore">Explore</span>
     </a>
     <a href="{% url 'enrolled' %}" class="{% if bottom == 'enrolled' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      Learn
+      <span data-i18n="dash.learn">Learn</span>
     </a>
     <a href="{% url 'saved' %}" class="{% if bottom == 'saved' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-      Saved
+      <span data-i18n="dash.saved">Saved</span>
     </a>
     <a href="{% url 'profile' %}" class="{% if bottom == 'profile' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Profile
+      <span data-i18n="dash.profile">Profile</span>
     </a>
   </nav>
   {% endif %}
@@ -433,5 +440,6 @@
       });
     })();
   </script>
+  <script src="{% static 'js/i18n.js' %}"></script>
 </body>
 </html>

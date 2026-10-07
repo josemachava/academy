@@ -27,6 +27,9 @@
     .nav-login { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; color: var(--ink); text-decoration: none; }
     .btn-outline { font-size: 0.72rem; font-weight: 700; color: var(--purple); border: 1px solid var(--purple); border-radius: 3px; padding: 0.45rem 1.1rem; text-decoration: none; }
     .btn-outline:hover { background: var(--purple); color: #fff; }
+    .lang-switch { display: flex; gap: 2px; background: #f3f4f6; border: 1px solid var(--border); border-radius: 999px; padding: 2px; }
+    .lang-switch button { border: 1px solid transparent; background: transparent; font: 700 0.62rem 'Inter', sans-serif; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 999px; cursor: pointer; color: var(--muted); }
+    .lang-switch button.active { background: #fff; color: #0f172a; border-color: var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
 
     /* hero */
     .hero { background: var(--bg); padding: 4.5rem 0 4rem; }
@@ -87,17 +90,21 @@
     <div class="nav-inner">
       <a href="{% url 'landing' %}"><img src="{% static 'images/logo.png' %}" alt="Academy"></a>
       <div class="nav-links">
-        <a href="{% url 'landing' %}">CURSOS</a>
-        <a href="{% url 'landing' %}">PROGRAMAS</a>
-        <a href="{% url 'landing' %}">COMUNIDADE</a>
+        <a href="{% url 'landing' %}" data-i18n="landing.nav.courses">CURSOS</a>
+        <a href="{% url 'landing' %}" data-i18n="landing.nav.programs">PROGRAMAS</a>
+        <a href="{% url 'landing' %}" data-i18n="landing.nav.community">COMUNIDADE</a>
       </div>
       <div class="nav-right">
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="pt" class="active">PT</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
         {% if user.is_authenticated %}
-        <a class="nav-login" href="{% url 'landing' %}">OS MEUS CURSOS</a>
-        <a class="btn-outline" href="{% url 'landing' %}">Abrir painel</a>
+        <a class="nav-login" href="{% url 'landing' %}" data-i18n="landing.nav.mycourses">OS MEUS CURSOS</a>
+        <a class="btn-outline" href="{% url 'landing' %}" data-i18n="landing.nav.openpanel">Abrir painel</a>
         {% else %}
-        <a class="nav-login" href="{% url 'login' %}">ENTRAR</a>
-        <a class="btn-outline" href="{% url 'signup' %}">Criar conta</a>
+        <a class="nav-login" href="{% url 'login' %}" data-i18n="landing.nav.login">ENTRAR</a>
+        <a class="btn-outline" href="{% url 'signup' %}" data-i18n="landing.nav.signup">Criar conta</a>
         {% endif %}
       </div>
     </div>
@@ -105,23 +112,23 @@
 
   <section class="hero">
     <div class="wrap">
-      <h1>GARANTE SEU FUTURO APRENDENDO NOVAS HABILIDADES ONLINE.</h1>
-      <p>Junta-te a milhares de estudantes e aprende com cursos práticos, ao teu ritmo, com certificado profissional.</p>
-      <a class="btn-solid" href="{% url 'signup' %}">Começar agora</a>
+      <h1 data-i18n="landing.hero.title">GARANTE SEU FUTURO APRENDENDO NOVAS HABILIDADES ONLINE.</h1>
+      <p data-i18n="landing.hero.subtitle">Junta-te a milhares de estudantes e aprende com cursos práticos, ao teu ritmo, com certificado profissional.</p>
+      <a class="btn-solid" href="{% url 'signup' %}" data-i18n="landing.hero.cta">Começar agora</a>
     </div>
   </section>
 
   <section class="band">
     <div class="wrap band-grid">
-      <h2>APRENDE AS TECNOLOGIAS USADAS NAS MELHORES EMPRESAS DE SOFTWARE DO MUNDO</h2>
+      <h2 data-i18n="landing.band.title">APRENDE AS TECNOLOGIAS USADAS NAS MELHORES EMPRESAS DE SOFTWARE DO MUNDO</h2>
       <div class="band-logos"><span>django</span><span>node</span><span>MongoDB</span><span>express</span></div>
-      <p>Domina as ferramentas que as grandes empresas usam todos os dias — do backend ao frontend, com projetos reais e tecnologias modernas.</p>
+      <p data-i18n="landing.band.desc">Domina as ferramentas que as grandes empresas usam todos os dias — do backend ao frontend, com projetos reais e tecnologias modernas.</p>
     </div>
   </section>
 
   <section class="courses">
     <div class="wrap">
-      <h2>Escolha o seu curso...</h2>
+      <h2 data-i18n="landing.courses.title">Escolha o seu curso...</h2>
       <div class="course-grid">
         <a href="{% url 'landing' %}">Python &amp; Django</a>
         <a href="{% url 'landing' %}">JavaScript</a>
@@ -130,21 +137,21 @@
         <a href="{% url 'landing' %}">Node.js</a>
         <a href="{% url 'landing' %}">Express &amp; APIs</a>
       </div>
-      <a class="explore" href="{% url 'landing' %}">Explore Todos Os Cursos ⟶</a>
+      <a class="explore" href="{% url 'landing' %}" data-i18n="landing.courses.explore">Explore Todos Os Cursos ⟶</a>
     </div>
   </section>
 
   <section class="careers">
     <div class="wrap">
-      <h2>DESENVOLVEMOS CARREIRAS<br>ATRAVÉS DA EDUCAÇÃO</h2>
-      <p>Subscreve e recebe novidades</p>
+      <h2 data-i18n="landing.careers.title">DESENVOLVEMOS CARREIRAS<br>ATRAVÉS DA EDUCAÇÃO</h2>
+      <p data-i18n="landing.careers.subtitle">Subscreve e recebe novidades</p>
       {% if messages %}
       {% for message in messages %}<div class="flash">{{ message }}</div>{% endfor %}
       {% endif %}
       <form class="news-form" method="post">
         {% csrf_token %}
-        <input type="email" name="email" placeholder="O teu e-mail" required />
-        <button type="submit">SUBSCREVER</button>
+        <input type="email" name="email" placeholder="O teu e-mail" data-i18n-placeholder="landing.careers.placeholder" required />
+        <button type="submit" data-i18n="landing.careers.btn">SUBSCREVER</button>
       </form>
     </div>
     <span class="confetti" style="left:6%;top:20%">●</span>
@@ -159,21 +166,21 @@
     <div class="wrap">
       <div class="foot-grid">
         <div>
-          <h4>Navegação</h4>
-          <a href="{% url 'landing' %}">Cursos</a>
-          <a href="{% url 'landing' %}">Programas</a>
-          <a href="{% url 'landing' %}">Comunidade</a>
+          <h4 data-i18n="landing.footer.nav">Navegação</h4>
+          <a href="{% url 'landing' %}" data-i18n="landing.nav.courses">Cursos</a>
+          <a href="{% url 'landing' %}" data-i18n="landing.nav.programs">Programas</a>
+          <a href="{% url 'landing' %}" data-i18n="landing.nav.community">Comunidade</a>
         </div>
         <div>
-          <h4>Cursos</h4>
+          <h4 data-i18n="landing.footer.courses">Cursos</h4>
           <a href="{% url 'landing' %}">Python &amp; Django</a>
           <a href="{% url 'landing' %}">JavaScript</a>
           <a href="{% url 'landing' %}">APIs &amp; Backend</a>
         </div>
         <div>
-          <h4>Sobre</h4>
-          <a href="{% url 'login' %}">Entrar</a>
-          <a href="{% url 'signup' %}">Criar conta</a>
+          <h4 data-i18n="landing.footer.about">Sobre</h4>
+          <a href="{% url 'login' %}" data-i18n="landing.nav.login">Entrar</a>
+          <a href="{% url 'signup' %}" data-i18n="landing.nav.signup">Criar conta</a>
         </div>
       </div>
       <div class="social">
@@ -182,9 +189,10 @@
         <a href="#" aria-label="Instagram">i</a>
         <a href="#" aria-label="LinkedIn">in</a>
       </div>
-      <div class="copy"><span>© 2026 Academy. Todos os direitos reservados.</span></div>
+      <div class="copy"><span data-i18n="landing.footer.copy">© 2026 Academy. Todos os direitos reservados.</span></div>
     </div>
   </footer>
 
+  <script src="{% static 'js/i18n.js' %}"></script>
 </body>
 </html>
