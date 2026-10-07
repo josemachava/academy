@@ -86,6 +86,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
                 'accounts.context_processors.notifications',
+                'accounts.context_processors.footer_data',
             ],
         },
     },

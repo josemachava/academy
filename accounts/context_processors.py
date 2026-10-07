@@ -1,4 +1,4 @@
-from .models import Course, Enrollment
+from .models import Course, Enrollment, FooterColumn, FooterPodcast, FooterSettings, FooterSocial
 
 
 def notifications(request):
@@ -43,3 +43,22 @@ def notifications(request):
     items.sort(key=lambda x: x["when"], reverse=True)
     items = items[:6]
     return {"notifications": items, "notif_count": len(items)}
+
+
+def footer_data(request):
+    try:
+        podcast = FooterPodcast.objects.first()
+        columns = list(FooterColumn.objects.prefetch_related("links").order_by("order", "id"))
+        socials = list(FooterSocial.objects.order_by("order", "id"))
+        settings_obj = FooterSettings.objects.first()
+    except Exception:
+        podcast = None
+        columns = []
+        socials = []
+        settings_obj = None
+    return {
+        "footer_podcast": podcast,
+        "footer_columns": columns,
+        "footer_socials": socials,
+        "footer_settings": settings_obj,
+    }
