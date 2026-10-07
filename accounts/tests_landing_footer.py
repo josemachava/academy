@@ -26,16 +26,18 @@ class LandingFooterYearTests(TestCase):
         self.assertIn("'footer.copy_suffix': 'Todos os direitos reservados'", js)
         self.assertIn("'footer.copy_suffix': 'All rights reserved'", js)
 
-    def test_landing_view_anonymous_renders_landing_with_kutiva(self):
+    def test_landing_view_anonymous_renders_dashboard_with_kutiva_logout(self):
         c = Client()
         resp = c.get(reverse('landing'))
         self.assertEqual(resp.status_code, 200)
-        # anonymous should get landing.html (Kutiva footer)
+        # landing page is dashboard for everyone; anonymous sees only main + footer (no sidebar)
         year = str(datetime.now().year)
         self.assertContains(resp, f'Kutiva {year}.')
         self.assertContains(resp, 'kutiva-footer')
-        # uses landing template
-        self.assertTemplateUsed(resp, 'landing.html')
+        self.assertTemplateUsed(resp, 'dashboard.html')
+        # logout view: sidebar hidden, main visible
+        self.assertNotContains(resp, 'id="sidebar"')
+        self.assertContains(resp, '<main>')
 
     def test_landing_view_authenticated_renders_dashboard(self):
         user = User.objects.create_user(email="auth@example.com", password="pass123", first_name="A", last_name="B")

@@ -214,7 +214,37 @@
     .message { padding: 0.7rem 1rem; font-size: 0.85rem; background: #141414; color: #fff; border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); display: flex; gap: 0.7rem; align-items: center; }
     .message .close { margin-left: auto; background: none; border: none; color: #fff; cursor: pointer; opacity: 0.6; }
 
+    /* footer — Kutiva */
+    .kutiva-footer { background: #0e143f; color: #d6d8e6; padding: 2.2rem 0 1.2rem; font-size: 0.78rem; margin-top: 2rem; }
+    .kutiva-footer .wrap { max-width: 1320px; margin: 0 auto; padding: 0 3rem; }
+    .foot-main { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 2.5rem 2rem; align-items: start; }
+    .foot-podcasts h3 { color: #e9c85d; font-size: 1.35rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.9rem; }
+    .foot-podcasts .spotify-badge { display: inline-flex; align-items: center; gap: 0.5rem; color: #1DB954; font-weight: 700; font-size: 1.1rem; text-decoration: none; margin-bottom: 0.7rem; }
+    .foot-podcasts .spotify-badge svg { width: 28px; height: 28px; }
+    .foot-podcasts .gpod-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: #fff; color: #2b2b2b; font-weight: 600; font-size: 0.68rem; padding: 0.4rem 0.6rem; border-radius: 6px; text-decoration: none; }
+    .foot-podcasts .gpod-badge .dots { display: flex; gap: 2px; align-items: center; }
+    .foot-podcasts .gpod-badge .dots span { width: 5px; height: 8px; border-radius: 3px; display: block; }
+    .foot-podcasts .gpod-badge .dots span:nth-child(1){ background:#4285F4; height:12px; }
+    .foot-podcasts .gpod-badge .dots span:nth-child(2){ background:#EA4335; height:9px; }
+    .foot-podcasts .gpod-badge .dots span:nth-child(3){ background:#FBBC05; height:7px; }
+    .foot-podcasts .gpod-badge .dots span:nth-child(4){ background:#34A853; height:10px; }
+    .foot-col h4 { color: #fff; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+    .foot-col a { display: block; color: #d6d8e6; text-decoration: none; font-size: 0.74rem; line-height: 1.5; margin-bottom: 0.3rem; }
+    .foot-col a:hover { color: #fff; text-decoration: underline; }
+    .foot-sep { height: 1px; background: rgba(255,255,255,0.5); margin: 1.6rem 0 1rem; }
+    .foot-bottom { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .foot-social { display: flex; gap: 0.5rem; }
+    .foot-social a { width: 30px; height: 30px; background: #1e4db7; color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .foot-social a:hover { background: #245cc8; }
+    .foot-social a svg { width: 14px; height: 14px; fill: #fff; }
+    .foot-copy { flex: 1; text-align: center; color: #e8e9f0; font-size: 0.74rem; }
+    .foot-top { width: 30px; height: 30px; background: #1e4db7; color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .foot-top svg { width: 13px; height: 13px; stroke: #fff; }
     @media (max-width: 900px) {
+      .foot-main { grid-template-columns: 1fr; }
+      .foot-bottom { flex-wrap: wrap; justify-content: center; }
+      .foot-copy { flex-basis: 100%; order: -1; margin-bottom: 0.6rem; }
+      .kutiva-footer .wrap { padding: 0 1rem; }
       .header-inner { justify-content: space-between; align-items: center; gap: 0.6rem; padding: 0.7rem 1rem; }
       .hamburger { display: none; }
       header .top-link { display: none; }
@@ -317,6 +347,7 @@
 
   <div class="layout">
     <button class="scrim" id="navScrim" hidden aria-label="Close menu"></button>
+    {% if user.is_authenticated %}
     <aside id="sidebar">
       <a class="side-link strong" href="{% url 'landing' %}" data-i18n="dash.creativefeed">Creative Feed</a>
       <a class="side-link {% if not active_category %}active{% endif %}" href="{% url 'landing' %}" data-i18n="dash.allclasses">All Classes</a>
@@ -324,6 +355,7 @@
       <a class="side-link {% if active_category == cat %}active{% endif %}" href="{% url 'landing' %}?category={{ cat|urlencode }}">{{ cat }}</a>
       {% endfor %}
     </aside>
+    {% endif %}
 
     <main>
       <h1 class="page-title">{% if active_category %}{{ active_category }}{% elif query %}Results{% else %}Discover{% endif %}</h1>
@@ -381,6 +413,26 @@
       {% endfor %}
     </main>
   </div>
+  <footer class="kutiva-footer">
+    <div class="wrap">
+      <div class="foot-main">
+        <div class="foot-podcasts">
+          <h3 data-i18n="footer.podcasts">Ouça Nossos<br>Podcasts</h3>
+          <a href="https://open.spotify.com" target="_blank" rel="noopener" class="spotify-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.52 17.3a1.02 1.02 0 01-1.4.42c-3.83-2.34-8.66-2.87-14.33-1.57a1.02 1.02 0 01-.46-1.98c6.17-1.41 11.66-.86 16 1.72.48.31.64.96.33 1.44l-.14-.03zm2.1-4.23a1.26 1.26 0 01-1.75.51c-4.38-2.69-11.06-3.47-16.24-1.9a1.26 1.26 0 11-.74-2.42c5.93-1.81 13.5-.98 18.59 2.18.6.38.8 1.19.42 1.79l-.28-.16zm.18-4.4c-5.25-3.12-13.91-3.41-18.91-1.87a1.51 1.51 0 11-.88-2.89c5.76-1.77 15.47-1.42 21.6 2.16a1.51 1.51 0 01-.81 2.76v-.16z"/></svg>Spotify</a><br>
+          <a href="https://podcasts.google.com" target="_blank" rel="noopener" class="gpod-badge"><span class="dots"><span></span><span></span><span></span><span></span></span>Google Podcasts</a>
+        </div>
+        <div class="foot-col"><h4 data-i18n="footer.nanodegrees">Nanodegrees</h4><a href="#">FullStack Nanodegree</a><a href="#">Frontend Nanodegree</a><a href="#">React Native Nanodegree</a><a href="#">DevOps Nanodegree</a><a href="#">Wordpress Nanodegree</a><a href="#">USSD Nanodegree</a></div>
+        <div class="foot-col"><h4 data-i18n="footer.programas">Programas</h4><a href="#">Kutiva On Air</a><a href="#">Developers Abroad</a><a href="#" data-i18n="footer.comunidade">Comunidade</a></div>
+        <div class="foot-col"><h4 data-i18n="footer.sobre">Sobre</h4><a href="#" data-i18n="footer.contacto">Contacto</a><a href="#" data-i18n="footer.direitos">Direitos Autorais</a><a href="#" data-i18n="footer.privacidade">Politica de privacidade</a><a href="#" data-i18n="footer.termos">Termos e condições</a></div>
+      </div>
+      <div class="foot-sep"></div>
+      <div class="foot-bottom">
+        <div class="foot-social"><a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.84c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.45h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.89h-2.34V21.88C18.34 21.12 22 16.99 22 12z"/></svg></a><a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.71-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.7.11 2.5.33 1.9-1.29 2.74-1.02 2.74-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.33-.01 2.4-.01 2.73 0 .27.18.58.69.48A10.02 10.02 0 0022 12c0-5.52-4.48-10-10-10z"/></svg></a><a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M23 6.9c-.74.33-1.53.55-2.36.65a4.12 4.12 0 001.81-2.27 8.22 8.22 0 01-2.6.99A4.1 4.1 0 0016.86 5c-2.26 0-4.09 1.83-4.09 4.09 0 .32.04.63.1.93A11.6 11.6 0 013.1 5.74a4.08 4.08 0 001.26 5.46A4.07 4.07 0 012.8 10.7v.05c0 1.92 1.37 3.53 3.18 3.88a4.1 4.1 0 01-1.85.07 4.1 4.1 0 003.83 2.84A8.23 8.23 0 012 19.02 11.62 11.62 0 008.29 21c7.55 0 11.68-6.26 11.68-11.68l-.01-.53A8.35 8.35 0 0023 6.9z"/></svg></a><a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23 12s0-3.36-.42-4.97a3.05 3.05 0 00-2.14-2.14C18.83 4.46 12 4.46 12 4.46s-6.83 0-8.44.43A3.05 3.05 0 00.42 7.03C0 8.64 0 12 0 12s0 3.36.42 4.97a3.05 3.05 0 002.14 2.14c1.61.43 8.44.43 8.44.43s6.83 0 8.44-.43a3.05 3.05 0 002.14-2.14C23 15.36 23 12 23 12zm-13.2 3.55v-7.1L16.6 12l-6.8 3.55z"/></svg></a></div>
+        <div class="foot-copy">Kutiva {% now "Y" %}. <span data-i18n="footer.copy_suffix">Todos os direitos reservados</span></div>
+        <a href="#" class="foot-top" aria-label="Voltar ao topo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14l6-6 6 6"/></svg></a>
+      </div>
+    </div>
+  </footer>
   {% if user.is_authenticated %}
   <nav class="bottom-nav">
     <a href="{% url 'landing' %}" class="{% if bottom == 'all' %}active{% endif %}">

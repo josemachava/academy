@@ -162,8 +162,6 @@ def landing_view(request):
     if request.method == "POST":
         messages.success(request, "Subscrição confirmada! Bem-vindo à Academy.")
         return redirect("landing")
-    if not request.user.is_authenticated:
-        return render(request, "landing.html")
     ctx = _dashboard_context(
         request.user,
         request.GET.get("category") or None,
