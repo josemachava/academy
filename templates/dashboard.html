@@ -277,10 +277,6 @@
         <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Pesquisar aulas, produtos digitais, professores" data-i18n-placeholder="dash.search.placeholder" />
       </div>
     </form>
-    <div class="lang-switch" role="group" aria-label="Language" style="margin-left:auto;">
-      <button type="button" data-lang="pt" class="active">PT</button>
-      <button type="button" data-lang="en">EN</button>
-    </div>
     {% if user.is_authenticated %}
     <nav class="top-right user-nav">
       <a class="top-link hide-m" href="{% url 'enrolled' %}" data-i18n="dash.mycourses">My Classes</a>

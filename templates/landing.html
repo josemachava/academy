@@ -95,10 +95,6 @@
         <a href="{% url 'landing' %}" data-i18n="landing.nav.community">COMUNIDADE</a>
       </div>
       <div class="nav-right">
-        <div class="lang-switch" role="group" aria-label="Language">
-          <button type="button" data-lang="pt" class="active">PT</button>
-          <button type="button" data-lang="en">EN</button>
-        </div>
         {% if user.is_authenticated %}
         <a class="nav-login" href="{% url 'landing' %}" data-i18n="landing.nav.mycourses">OS MEUS CURSOS</a>
         <a class="btn-outline" href="{% url 'landing' %}" data-i18n="landing.nav.openpanel">Abrir painel</a>
