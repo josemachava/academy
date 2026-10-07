@@ -162,6 +162,8 @@ def landing_view(request):
     if request.method == "POST":
         messages.success(request, "Subscrição confirmada! Bem-vindo à Academy.")
         return redirect("landing")
+    if not request.user.is_authenticated:
+        return render(request, "landing.html")
     ctx = _dashboard_context(
         request.user,
         request.GET.get("category") or None,
@@ -176,7 +178,7 @@ def signup_view(request):
     form = SignupForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.save()
-        login(request, user)
+        login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         messages.success(request, f"Bem-vindo, {user.first_name}! A sua conta foi criada.")
         return redirect("landing")
     return render(request, "signup.html", {"form": form})
