@@ -59,7 +59,16 @@
       border-radius: 6px;
       padding: 28px 28px 22px;
       box-shadow: 0 1px 2px rgba(16,24,40,0.04), 0 8px 24px rgba(16,24,40,0.06);
+      position: relative;
     }
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.1rem;
+    }
+    .card-header-text { flex: 1; min-width: 0; }
     .card-title {
       font-size: 1.42rem;
       font-weight: 800;
@@ -71,9 +80,37 @@
     .card-sub {
       font-size: 0.78rem;
       color: var(--muted);
-      margin-bottom: 1.25rem;
       line-height: 1.5;
     }
+    /* Language switch */
+    .lang-switch {
+      display: flex;
+      gap: 2px;
+      background: #f3f4f6;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      padding: 2px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .lang-switch button {
+      border: 1px solid transparent;
+      background: transparent;
+      font: 700 0.62rem 'Inter', sans-serif;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .lang-switch button.active {
+      background: #fff;
+      color: #0f172a;
+      border-color: var(--border-strong);
+      box-shadow: 0 1px 2px rgba(16,24,40,0.08);
+    }
+    .lang-switch button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
     /* OAuth buttons */
     .oauth-stack { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.9rem; }
     .oauth-btn {
@@ -178,7 +215,7 @@
       .row { grid-template-columns: 1fr; }
       body { padding: 1.5rem 0.75rem 2rem; }
     }
-    /* Check row (keep for login remember) */
+    /* Check row */
     .check-row {
       display: flex;
       align-items: center;
@@ -256,6 +293,7 @@
   <div class="card">{% block content %}{% endblock %}</div>
 
   <script>
+    // Eye toggle
     document.addEventListener('click', function(e) {
       var btn = e.target.closest('.eye-btn');
       if (!btn) return;
@@ -270,6 +308,96 @@
       var eyeOff = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a19.86 19.86 0 0 1 5.08-5.9M9.53 9.53A3.2 3.2 0 0 0 12 15.2a3.2 3.2 0 0 0 3.47-3.47"/><path d="M1 1l22 22"/></svg>';
       btn.innerHTML = isPw ? eyeOff : eyeOpen;
     });
+    // i18n
+    (function(){
+      var dict = {
+        pt: {
+          'login.title': 'Iniciar sessão',
+          'login.subtitle': 'Bem-vindo de volta. Inicie sessão para continuar',
+          'signup.title': 'Criar conta',
+          'signup.subtitle': 'Crie a sua conta para continuar',
+          'oauth.github': 'Continuar com GitHub',
+          'oauth.google': 'Continuar com Google',
+          'oauth.agentmail': 'Continuar com AgentMail',
+          'divider.or': 'ou',
+          'field.email': 'E-mail',
+          'field.password': 'Palavra-passe',
+          'field.firstname': 'Nome',
+          'field.lastname': 'Apelido',
+          'field.confirm': 'Confirmar palavra-passe',
+          'forgot': 'Esqueceu a palavra-passe?',
+          'hint.password': 'Use 8–32 caracteres com maiúsculas, minúsculas, número e caractere especial.',
+          'placeholder.email': 'exemplo@email.com',
+          'placeholder.password.login': '•••••',
+          'placeholder.password.create': 'Crie uma palavra-passe forte',
+          'placeholder.password.confirm': 'Confirme a sua palavra-passe',
+          'btn.signin': 'Entrar',
+          'btn.signup': 'Criar conta',
+          'footer.noaccount': 'Não tem uma conta?',
+          'footer.signup': 'Criar conta agora',
+          'footer.hasaccount': 'Já tem uma conta?',
+          'footer.signin': 'Iniciar sessão'
+        },
+        en: {
+          'login.title': 'Sign In',
+          'login.subtitle': 'Welcome back. Sign in to continue',
+          'signup.title': 'Sign Up',
+          'signup.subtitle': 'Create your account to continue',
+          'oauth.github': 'Continue with GitHub',
+          'oauth.google': 'Continue with Google',
+          'oauth.agentmail': 'Continue with AgentMail',
+          'divider.or': 'or',
+          'field.email': 'Email',
+          'field.password': 'Password',
+          'field.firstname': 'First name',
+          'field.lastname': 'Last name',
+          'field.confirm': 'Confirm password',
+          'forgot': 'Forgot password?',
+          'hint.password': 'Use 8–32 characters with uppercase, lowercase, number and special character.',
+          'placeholder.email': 'example@email.com',
+          'placeholder.password.login': '•••••',
+          'placeholder.password.create': 'Create a strong password',
+          'placeholder.password.confirm': 'Confirm your password',
+          'btn.signin': 'Sign In',
+          'btn.signup': 'Create Account',
+          'footer.noaccount': "Don't have an account?",
+          'footer.signup': 'Sign Up Now',
+          'footer.hasaccount': 'Already have an account?',
+          'footer.signin': 'Sign In'
+        }
+      };
+      function applyLang(lang){
+        if(!dict[lang]) lang='pt';
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-i18n]').forEach(function(el){
+          var key = el.getAttribute('data-i18n');
+          if(dict[lang][key] !== undefined) el.textContent = dict[lang][key];
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+          var key = el.getAttribute('data-i18n-placeholder');
+          if(dict[lang][key] !== undefined) el.setAttribute('placeholder', dict[lang][key]);
+        });
+        document.querySelectorAll('.lang-switch button').forEach(function(b){
+          b.classList.toggle('active', b.getAttribute('data-lang')===lang);
+        });
+        try{ localStorage.setItem('academy_lang', lang); }catch(e){}
+      }
+      var stored = null;
+      try{ stored = localStorage.getItem('academy_lang'); }catch(e){}
+      var initial = stored || 'pt';
+      // expose
+      window.__academySetLang = applyLang;
+      document.addEventListener('DOMContentLoaded', function(){
+        applyLang(initial);
+        document.querySelectorAll('.lang-switch button').forEach(function(b){
+          b.addEventListener('click', function(){ applyLang(b.getAttribute('data-lang')); });
+        });
+      });
+      // if DOM already ready (card injected synchronously)
+      if(document.readyState !== 'loading'){
+        applyLang(initial);
+      }
+    })();
   </script>
 </body>
 </html>
