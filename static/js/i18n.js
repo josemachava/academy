@@ -86,7 +86,8 @@
       'footer.direitos': 'Direitos Autorais',
       'footer.privacidade': 'Politica de privacidade',
       'footer.termos': 'Termos e condições',
-      'footer.copy': 'Kutiva 2022. Todos os direitos reservados'
+      'footer.copy': 'Kutiva 2022. Todos os direitos reservados',
+      'footer.copy_suffix': 'Todos os direitos reservados'
     },
     en: {
       'landing.nav.courses': 'COURSES',
@@ -169,7 +170,8 @@
       'footer.direitos': 'Copyright',
       'footer.privacidade': 'Privacy Policy',
       'footer.termos': 'Terms and Conditions',
-      'footer.copy': 'Kutiva 2022. All rights reserved'
+      'footer.copy': 'Kutiva 2022. All rights reserved',
+      'footer.copy_suffix': 'All rights reserved'
     }
   };
   function applyLang(lang){
