@@ -136,3 +136,79 @@ class LessonProgress(models.Model):
 
     def __str__(self):
         return f"{self.user} — {self.lesson.title} ({'done' if self.completed else 'todo'})"
+
+
+# ── Footer (admin-editable) ──
+class FooterPodcast(models.Model):
+    heading = models.CharField(max_length=100, default="Ouça Nossos Podcasts")
+    spotify_url = models.URLField(default="https://open.spotify.com", blank=True)
+    google_podcasts_url = models.URLField(default="https://podcasts.google.com", blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Footer Podcast"
+        verbose_name_plural = "Footer Podcasts"
+
+    def __str__(self):
+        return self.heading
+
+
+class FooterColumn(models.Model):
+    title = models.CharField(max_length=100, help_text="Ex: Nanodegrees, Programas, Sobre")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "Footer Column"
+        verbose_name_plural = "Footer Columns"
+
+    def __str__(self):
+        return self.title
+
+
+class FooterLink(models.Model):
+    column = models.ForeignKey(FooterColumn, on_delete=models.CASCADE, related_name="links")
+    title = models.CharField(max_length=120)
+    url = models.CharField(max_length=500, default="#", help_text="URL or #")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.column.title} — {self.title}"
+
+
+class FooterSocial(models.Model):
+    PLATFORM_CHOICES = [
+        ("facebook", "Facebook"),
+        ("github", "GitHub"),
+        ("twitter", "Twitter"),
+        ("youtube", "YouTube"),
+        ("instagram", "Instagram"),
+        ("linkedin", "LinkedIn"),
+        ("spotify", "Spotify"),
+    ]
+    platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES, unique=True)
+    url = models.URLField(default="#")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "Footer Social Link"
+        verbose_name_plural = "Footer Social Links"
+
+    def __str__(self):
+        return self.get_platform_display()
+
+
+class FooterSettings(models.Model):
+    copyright_text = models.CharField(max_length=200, default="Todos os direitos reservados", help_text="Suffix after 'Kutiva YYYY.' — PT text; EN uses i18n suffix")
+    copyright_text_en = models.CharField(max_length=200, default="All rights reserved", blank=True)
+
+    class Meta:
+        verbose_name = "Footer Settings"
+        verbose_name_plural = "Footer Settings"
+
+    def __str__(self):
+        return "Footer Settings"

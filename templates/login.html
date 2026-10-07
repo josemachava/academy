@@ -1,8 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Iniciar sessão{% endblock %}
+{% block title %}Academy — Iniciar sessão{% endblock %}
 {% block content %}
-  <h1 class="card-title">Bem-vindo de volta</h1>
-  <p class="card-sub">Inicie sessão na sua conta para continuar.</p>
+  <h1 class="card-title" data-i18n="login.title">Iniciar sessão</h1>
+  <p class="card-sub" data-i18n="login.subtitle">Bem-vindo de volta. Inicie sessão para continuar</p>
+
+  <div class="oauth-stack">
+    <button type="button" class="oauth-btn" aria-label="Continue with GitHub">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span data-i18n="oauth.github">Continuar com GitHub</span>
+    </button>
+    <button type="button" class="oauth-btn" aria-label="Continue with Google">
+      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.27-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09A6.97 6.97 0 015.48 12c0-.72.13-1.42.36-2.09V7.07H2.18A11 11 0 001 12c0 1.78.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      <span data-i18n="oauth.google">Continuar com Google</span>
+    </button>
+  </div>
+
+  <div class="divider"><span data-i18n="divider.or">ou</span></div>
 
   {% if form.non_field_errors %}
     <div class="form-errors">{% for e in form.non_field_errors %}{{ e }}{% endfor %}</div>
@@ -11,28 +24,29 @@
   <form method="post" novalidate>
     {% csrf_token %}
     <div class="field">
-      <label for="id_email">Endereço de e-mail <span class="req">*</span></label>
-      <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" placeholder="joao@exemplo.com" autocomplete="email" />
+      <label for="id_email" data-i18n="field.email">E-mail</label>
+      <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" placeholder="exemplo@email.com" data-i18n-placeholder="placeholder.email" autocomplete="email" required />
       {% if form.email.errors %}<div class="errors">{{ form.email.errors.0 }}</div>{% endif %}
     </div>
 
     <div class="field">
-      <label for="id_password">Palavra-passe <span class="req">*</span></label>
-      <input type="password" name="password" id="id_password" placeholder="Introduza a sua palavra-passe" autocomplete="current-password" />
+      <div class="label-row">
+        <label for="id_password" data-i18n="field.password">Palavra-passe</label>
+        <a class="forgot-link" href="#" data-i18n="forgot">Esqueceu a palavra-passe?</a>
+      </div>
+      <div class="password-wrap">
+        <input type="password" name="password" id="id_password" placeholder="•••••" data-i18n-placeholder="placeholder.password.login" autocomplete="current-password" required />
+        <button type="button" class="eye-btn" aria-label="Show password">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3.2"/></svg>
+        </button>
+      </div>
       {% if form.password.errors %}<div class="errors">{{ form.password.errors.0 }}</div>{% endif %}
     </div>
 
-    <div class="check-row">
-      <div class="check-field">
-        <input type="checkbox" name="remember_me" id="id_remember_me" {% if form.remember_me.value %}checked{% endif %} />
-        <label for="id_remember_me">Lembrar-me</label>
-      </div>
-    </div>
-
-    <button class="btn" type="submit">Entrar</button>
+    <button class="btn" type="submit" data-i18n="btn.signin">Entrar</button>
   </form>
 
   <div class="card-footer">
-    Não tem uma conta? <a href="{% url 'signup' %}">Criar conta</a>
+    <span data-i18n="footer.noaccount">Não tem uma conta?</span> <a href="{% url 'signup' %}" data-i18n="footer.signup">Criar conta agora</a>
   </div>
 {% endblock %}

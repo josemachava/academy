@@ -47,6 +47,9 @@
     .search-wrap input { flex: 1; min-width: 0; background: transparent; border: none; outline: none; color: var(--ink); font-family: inherit; font-size: 0.85rem; }
     .search-wrap input::placeholder { color: var(--muted); }
     .top-right { margin-left: auto; display: flex; align-items: center; gap: 1.1rem; }
+    .lang-switch { display: flex; gap: 2px; background: #f3f4f6; border: 1px solid var(--border); border-radius: 999px; padding: 2px; }
+    .lang-switch button { border: 1px solid transparent; background: transparent; font: 700 0.62rem 'Inter', sans-serif; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 999px; cursor: pointer; color: var(--muted); }
+    .lang-switch button.active { background: #fff; color: #0f172a; border-color: var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
     .btn-login { font-size: 0.8rem; font-weight: 700; color: var(--ink); text-decoration: none; white-space: nowrap; }
     .btn-login:hover { color: var(--accent); }
     .btn-signup { font-size: 0.8rem; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 0.5rem 1rem; text-decoration: none; white-space: nowrap; }
@@ -211,7 +214,37 @@
     .message { padding: 0.7rem 1rem; font-size: 0.85rem; background: #141414; color: #fff; border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); display: flex; gap: 0.7rem; align-items: center; }
     .message .close { margin-left: auto; background: none; border: none; color: #fff; cursor: pointer; opacity: 0.6; }
 
+    /* footer — Kutiva */
+    .kutiva-footer { background: #0a0f3d; color: #d6d8e6; padding: 2.2rem 0 1.2rem; font-size: 0.78rem; margin-top: 2rem; }
+    .kutiva-footer .wrap { max-width: 1320px; margin: 0 auto; padding: 0 3rem; }
+    .foot-main { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 2.5rem 2rem; align-items: start; }
+    .foot-podcasts h3 { color: #e9c85d; font-size: 1.35rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.9rem; }
+    .foot-podcasts .spotify-badge { display: inline-flex; align-items: center; gap: 0.5rem; color: #1DB954; font-weight: 700; font-size: 1.1rem; text-decoration: none; margin-bottom: 0.7rem; }
+    .foot-podcasts .spotify-badge svg { width: 28px; height: 28px; }
+    .foot-podcasts .gpod-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: #fff; color: #2b2b2b; font-weight: 600; font-size: 0.68rem; padding: 0.4rem 0.6rem; border-radius: 6px; text-decoration: none; }
+    .foot-podcasts .gpod-badge .dots { display: flex; gap: 2px; align-items: center; }
+    .foot-podcasts .gpod-badge .dots span { width: 5px; height: 8px; border-radius: 3px; display: block; }
+    .foot-podcasts .gpod-badge .dots span:nth-child(1){ background:#4285F4; height:12px; }
+    .foot-podcasts .gpod-badge .dots span:nth-child(2){ background:#EA4335; height:9px; }
+    .foot-podcasts .gpod-badge .dots span:nth-child(3){ background:#FBBC05; height:7px; }
+    .foot-podcasts .gpod-badge .dots span:nth-child(4){ background:#34A853; height:10px; }
+    .foot-col h4 { color: #fff; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+    .foot-col a { display: block; color: #d6d8e6; text-decoration: none; font-size: 0.74rem; line-height: 1.5; margin-bottom: 0.3rem; }
+    .foot-col a:hover { color: #fff; text-decoration: underline; }
+    .foot-sep { height: 1px; background: rgba(255,255,255,0.5); margin: 1.6rem 0 1rem; }
+    .foot-bottom { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .foot-social { display: flex; gap: 0.5rem; }
+    .foot-social a { width: 30px; height: 30px; background: #1e4db7; color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .foot-social a:hover { background: #245cc8; }
+    .foot-social a svg { width: 14px; height: 14px; fill: #fff; }
+    .foot-copy { flex: 1; text-align: center; color: #e8e9f0; font-size: 0.74rem; }
+    .foot-top { width: 30px; height: 30px; background: #1e4db7; color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .foot-top svg { width: 13px; height: 13px; stroke: #fff; }
     @media (max-width: 900px) {
+      .foot-main { grid-template-columns: 1fr; }
+      .foot-bottom { flex-wrap: wrap; justify-content: center; }
+      .foot-copy { flex-basis: 100%; order: -1; margin-bottom: 0.6rem; }
+      .kutiva-footer .wrap { padding: 0 1rem; }
       .header-inner { justify-content: space-between; align-items: center; gap: 0.6rem; padding: 0.7rem 1rem; }
       .hamburger { display: none; }
       header .top-link { display: none; }
@@ -267,30 +300,30 @@
     <div class="header-inner">
     <button class="hamburger" id="navToggle" aria-label="Open menu">☰</button>
     <a class="logo" href="{% url 'landing' %}"><img src="{% static 'images/logo.png' %}" alt="Academy"></a>
-    <a class="top-link hide-m" href="{% url 'landing' %}">Creative Feed</a>
+    <a class="top-link hide-m" href="{% url 'landing' %}" data-i18n="dash.creativefeed">Creative Feed</a>
     <form class="search-form" method="get" action="{% url 'landing' %}">
       <div class="search-wrap">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Search classes, digital products, teachers" />
+        <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Pesquisar aulas, produtos digitais, professores" data-i18n-placeholder="dash.search.placeholder" />
       </div>
     </form>
     {% if user.is_authenticated %}
     <nav class="top-right user-nav">
-      <a class="top-link hide-m" href="{% url 'enrolled' %}">My Classes</a>
+      <a class="top-link hide-m" href="{% url 'enrolled' %}" data-i18n="dash.mycourses">My Classes</a>
       <div class="user-menu">
         <button class="bell" id="bellBtn" aria-label="Notifications">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           {% if notif_count %}<span class="bell-dot">{{ notif_count }}</span>{% endif %}
         </button>
         <div class="menu-card notif-card" id="bellCard" hidden>
-          <div class="menu-title">Notifications</div>
+          <div class="menu-title" data-i18n="dash.notification.title">Notifications</div>
           {% for n in notifications %}
           <a class="notif-item" href="{% url 'classroom' n.course_id %}">
             <span class="notif-dot {{ n.kind }}"></span>
             <span><strong>{{ n.title }}</strong><em>{{ n.text }}</em><small>{{ n.when|timesince }} ago</small></span>
           </a>
           {% empty %}
-          <div class="notif-empty">No notifications yet.</div>
+          <div class="notif-empty" data-i18n="dash.notification.empty">No notifications yet.</div>
           {% endfor %}
         </div>
       </div>
@@ -300,13 +333,13 @@
           <div class="menu-name">{{ user.get_full_name }}</div>
           <div class="menu-email">{{ user.email }}</div>
           <div class="menu-sep"></div>
-          <a class="menu-signout" href="{% url 'logout' %}">Sign out</a>
+          <a class="menu-signout" href="{% url 'logout' %}" data-i18n="dash.signout">Sign out</a>
         </div>
       </div>
     {% else %}
     <nav class="top-right auth-nav">
-      <a class="btn-login" href="{% url 'login' %}">Entrar</a>
-      <a class="btn-signup" href="{% url 'signup' %}">Criar conta</a>
+      <a class="btn-login" href="{% url 'login' %}" data-i18n="dash.signin">Entrar</a>
+      <a class="btn-signup" href="{% url 'signup' %}" data-i18n="dash.signup">Criar conta</a>
     </nav>
     {% endif %}
     </div>
@@ -314,12 +347,15 @@
 
   <div class="layout">
     <button class="scrim" id="navScrim" hidden aria-label="Close menu"></button>
+    {% if user.is_authenticated %}
     <aside id="sidebar">
-      <a class="side-link strong {% if not active_category %}active{% endif %}" href="{% url 'landing' %}">All Classes</a>
+      <a class="side-link strong" href="{% url 'landing' %}" data-i18n="dash.creativefeed">Creative Feed</a>
+      <a class="side-link {% if not active_category %}active{% endif %}" href="{% url 'landing' %}" data-i18n="dash.allclasses">All Classes</a>
       {% for cat in categories %}
       <a class="side-link {% if active_category == cat %}active{% endif %}" href="{% url 'landing' %}?category={{ cat|urlencode }}">{{ cat }}</a>
       {% endfor %}
     </aside>
+    {% endif %}
 
     <main>
       <h1 class="page-title">{% if active_category %}{{ active_category }}{% elif query %}Results{% else %}Discover{% endif %}</h1>
@@ -363,37 +399,37 @@
           </article>
           {% empty %}
           <div class="empty-state">
-            <h3>No classes found</h3>
-            <p>Try a different search or category.</p>
+            <h3 data-i18n="dash.noclasses">No classes found</h3>
+            <p data-i18n="dash.noclasses.sub">Try a different search or category.</p>
           </div>
           {% endfor %}
         </div>
       </section>
       {% empty %}
       <div class="empty-state">
-        <h3>No classes found</h3>
-        <p>Try a different search or category.</p>
+        <h3 data-i18n="dash.noclasses">No classes found</h3>
+        <p data-i18n="dash.noclasses.sub">Try a different search or category.</p>
       </div>
       {% endfor %}
     </main>
   </div>
-  {% if user.is_authenticated %}
+{% if user.is_authenticated %}
   <nav class="bottom-nav">
     <a href="{% url 'landing' %}" class="{% if bottom == 'all' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Explore
+      <span data-i18n="dash.explore">Explore</span>
     </a>
     <a href="{% url 'enrolled' %}" class="{% if bottom == 'enrolled' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      Learn
+      <span data-i18n="dash.learn">Learn</span>
     </a>
     <a href="{% url 'saved' %}" class="{% if bottom == 'saved' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-      Saved
+      <span data-i18n="dash.saved">Saved</span>
     </a>
     <a href="{% url 'profile' %}" class="{% if bottom == 'profile' %}active{% endif %}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Profile
+      <span data-i18n="dash.profile">Profile</span>
     </a>
   </nav>
   {% endif %}
@@ -433,5 +469,6 @@
       });
     })();
   </script>
+  <script src="{% static 'js/i18n.js' %}"></script>
 </body>
 </html>

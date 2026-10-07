@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Termos e Condições — Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--border:#e5e7eb;--text:#0f172a;--muted:#6b7280;--primary:#0056d2}
+    body{font-family:'Inter',sans-serif;background:#fff;color:var(--text)}
+    .header{border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:50}
+    .header-inner{max-width:1320px;margin:0 auto;padding:0.7rem 1.5rem;display:flex;align-items:center;gap:1rem}
+    .header-inner img{height:28px}
+    .header-inner nav{margin-left:auto;display:flex;gap:1rem}
+    .header-inner nav a{font-size:0.78rem;font-weight:600;color:var(--text);text-decoration:none}
+    .wrap{max-width:860px;margin:0 auto;padding:3rem 1.5rem}
+    h1{font-size:1.8rem;font-weight:800;margin-bottom:0.6rem}
+    .lead{color:var(--muted);font-size:0.9rem;line-height:1.6;margin-bottom:1.4rem}
+    .content{line-height:1.7;font-size:0.9rem;color:#1f2937}
+    .content h2{font-size:1.05rem;margin:1.4rem 0 0.6rem}
+    .kutiva-footer{background:#090b37;color:#d6d8e6;padding:2.2rem 0 1.2rem;font-size:0.78rem;margin-top:3rem}
+    .kutiva-footer .wrap{max-width:1320px;margin:0 auto;padding:0 3rem}
+    .foot-main{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:2rem}
+    .foot-podcasts h3{color:#e9c85d;font-size:1.35rem;font-weight:800;line-height:1.15;margin-bottom:0.9rem}
+    .foot-podcasts .spotify-badge{color:#1DB954;font-weight:700;display:inline-flex;align-items:center;gap:0.4rem;text-decoration:none;margin-bottom:0.6rem}
+    .foot-podcasts .spotify-badge svg{width:26px;height:26px}
+    .foot-podcasts .gpod-badge{display:inline-flex;align-items:center;gap:0.4rem;background:#fff;color:#2b2b2b;padding:0.4rem 0.6rem;border-radius:6px;font-size:0.68rem;font-weight:600;text-decoration:none}
+    .foot-podcasts .gpod-badge .dots{display:flex;gap:2px}
+    .foot-podcasts .gpod-badge .dots span{width:5px;height:8px;border-radius:3px;display:block}
+    .foot-podcasts .gpod-badge .dots span:nth-child(1){background:#4285F4;height:12px}
+    .foot-podcasts .gpod-badge .dots span:nth-child(2){background:#EA4335;height:9px}
+    .foot-podcasts .gpod-badge .dots span:nth-child(3){background:#FBBC05;height:7px}
+    .foot-podcasts .gpod-badge .dots span:nth-child(4){background:#34A853;height:10px}
+    .foot-col h4{color:#fff;font-size:0.8rem;margin-bottom:0.7rem}
+    .foot-col a{display:block;color:#d6d8e6;text-decoration:none;font-size:0.74rem;margin-bottom:0.3rem}
+    .foot-sep{height:1px;background:rgba(255,255,255,0.5);margin:1.6rem 0 1rem}
+    .foot-bottom{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .foot-social{display:flex;gap:0.5rem}
+    .foot-social a{width:30px;height:30px;background:#1e4db7;color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none}
+    .foot-copy{flex:1;text-align:center;color:#e8e9f0;font-size:0.74rem}
+    .foot-top{width:30px;height:30px;background:#1e4db7;color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none}
+    @media(max-width:760px){.foot-main{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="header"><div class="header-inner"><a href="{% url 'landing' %}"><img src="{% static 'images/logo.png' %}" alt="Academy"></a><nav><a href="{% url 'landing' %}">Início</a><a href="{% url 'contact' %}">Contacto</a></nav></div></header>
+  <div class="wrap">
+    <h1 data-i18n="page.terms.title">Termos e Condições</h1>
+    <p class="lead" data-i18n="page.terms.lead">Ao utilizar a Academy/Kutiva, concorda com os seguintes termos.</p>
+    <div class="content">
+      <h2>1. Conta e acesso</h2>
+      <p data-i18n="page.terms.p1">É responsável por manter a confidencialidade da sua conta e palavra-passe.</p>
+      <h2>2. Conteúdo</h2>
+      <p>Os cursos são para uso pessoal. É proibida a partilha não autorizada.</p>
+      <h2>3. Pagamentos</h2>
+      <p>Taxas são indicadas no momento da compra e não reembolsáveis exceto quando a lei exigir.</p>
+      <h2>4. Alterações</h2>
+      <p data-i18n="page.terms.p4">Podemos atualizar estes termos. A versão vigente estará sempre nesta página com data de atualização: {% now "d/m/Y" %}.</p>
+    </div>
+  </div>
+<script src="{% static 'js/i18n.js' %}"></script>
+</body>
+</html>

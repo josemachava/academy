@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto — Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--border:#e5e7eb;--text:#0f172a;--muted:#6b7280;--primary:#0056d2;--primary-hover:#00419e;--bg:#f5f5f3}
+    body{font-family:'Inter',sans-serif;background:#fff;color:var(--text);-webkit-font-smoothing:antialiased}
+    .header{border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:50}
+    .header-inner{max-width:1320px;margin:0 auto;padding:0.7rem 1.5rem;display:flex;align-items:center;gap:1rem}
+    .header-inner img{height:28px}
+    .header-inner nav{margin-left:auto;display:flex;gap:1rem;align-items:center}
+    .header-inner nav a{font-size:0.78rem;font-weight:600;color:var(--text);text-decoration:none}
+    .header-inner nav a.btn{color:#fff;background:var(--primary);padding:0.45rem 1rem;border-radius:4px}
+    .wrap{max-width:860px;margin:0 auto;padding:3rem 1.5rem}
+    h1{font-size:1.8rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.6rem}
+    .lead{color:var(--muted);font-size:0.9rem;line-height:1.6;margin-bottom:1.6rem}
+    .card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:1.4rem}
+    .field{display:flex;flex-direction:column;gap:0.3rem;margin-bottom:0.9rem}
+    .field label{font-size:0.78rem;font-weight:600}
+    .field input,.field textarea{border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.8rem;font:inherit;font-size:0.85rem;background:#f9fafb}
+    .field input:focus,.field textarea:focus{outline:none;border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px rgba(0,86,210,0.12)}
+    .btn{width:100%;background:var(--primary);color:#fff;border:none;border-radius:6px;padding:0.7rem;font-weight:700;cursor:pointer}
+    .btn:hover{background:var(--primary-hover)}
+    .kutiva-footer{background:#090b37;color:#d6d8e6;padding:2.2rem 0 1.2rem;font-size:0.78rem;margin-top:3rem}
+    .kutiva-footer .wrap{max-width:1320px;margin:0 auto;padding:0 3rem}
+    .foot-main{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:2rem;align-items:start}
+    .foot-podcasts h3{color:#e9c85d;font-size:1.35rem;font-weight:800;line-height:1.15;margin-bottom:0.9rem}
+    .foot-podcasts .spotify-badge{color:#1DB954;font-weight:700;display:inline-flex;align-items:center;gap:0.4rem;text-decoration:none;margin-bottom:0.6rem}
+    .foot-podcasts .spotify-badge svg{width:26px;height:26px}
+    .foot-podcasts .gpod-badge{display:inline-flex;align-items:center;gap:0.4rem;background:#fff;color:#2b2b2b;padding:0.4rem 0.6rem;border-radius:6px;font-size:0.68rem;font-weight:600;text-decoration:none}
+    .foot-podcasts .gpod-badge .dots{display:flex;gap:2px}
+    .foot-podcasts .gpod-badge .dots span{width:5px;height:8px;border-radius:3px;display:block}
+    .foot-podcasts .gpod-badge .dots span:nth-child(1){background:#4285F4;height:12px}
+    .foot-podcasts .gpod-badge .dots span:nth-child(2){background:#EA4335;height:9px}
+    .foot-podcasts .gpod-badge .dots span:nth-child(3){background:#FBBC05;height:7px}
+    .foot-podcasts .gpod-badge .dots span:nth-child(4){background:#34A853;height:10px}
+    .foot-col h4{color:#fff;font-size:0.8rem;margin-bottom:0.7rem}
+    .foot-col a{display:block;color:#d6d8e6;text-decoration:none;font-size:0.74rem;margin-bottom:0.3rem}
+    .foot-col a:hover{color:#fff;text-decoration:underline}
+    .foot-sep{height:1px;background:rgba(255,255,255,0.5);margin:1.6rem 0 1rem}
+    .foot-bottom{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .foot-social{display:flex;gap:0.5rem}
+    .foot-social a{width:30px;height:30px;background:#1e4db7;color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none}
+    .foot-social a svg{width:14px;height:14px;fill:#fff}
+    .foot-copy{flex:1;text-align:center;color:#e8e9f0;font-size:0.74rem}
+    .foot-top{width:30px;height:30px;background:#1e4db7;color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none}
+    @media(max-width:760px){.foot-main{grid-template-columns:1fr}.foot-bottom{flex-wrap:wrap;justify-content:center}.foot-copy{flex-basis:100%;order:-1;margin-bottom:0.6rem}}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="{% url 'landing' %}"><img src="{% static 'images/logo.png' %}" alt="Academy"></a>
+      <nav>
+        <a href="{% url 'landing' %}" data-i18n="nav.home">Início</a>
+        <a href="{% url 'login' %}" data-i18n="nav.login">Entrar</a>
+        <a href="{% url 'signup' %}" class="btn" data-i18n="nav.signup">Criar conta</a>
+      </nav>
+    </div>
+  </header>
+  <div class="wrap">
+    <h1 data-i18n="contact.title">Contacto</h1>
+    <p class="lead" data-i18n="contact.lead">Tem dúvidas ou sugestões? Envie-nos uma mensagem e responderemos em breve.</p>
+    <div class="card">
+      <form method="post" action="#">
+        {% csrf_token %}
+        <div class="field"><label data-i18n="contact.name">Nome</label><input type="text" placeholder="O seu nome" data-i18n-placeholder="contact.name_ph"></div>
+        <div class="field"><label>Email</label><input type="email" placeholder="exemplo@email.com" data-i18n-placeholder="placeholder.email"></div>
+        <div class="field"><label data-i18n="contact.msg">Mensagem</label><textarea rows="5" placeholder="Escreva a sua mensagem..." data-i18n-placeholder="contact.msg_ph"></textarea></div>
+        <button class="btn" type="submit" data-i18n="contact.send">Enviar mensagem</button>
+      </form>
+      <p style="margin-top:1rem;color:var(--muted);font-size:0.78rem" data-i18n="contact.alt">Ou contacte-nos em hello@kutiva.ao</p>
+    </div>
+  </div>
+<script src="{% static 'js/i18n.js' %}"></script>
+</body>
+</html>

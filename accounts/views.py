@@ -170,13 +170,29 @@ def landing_view(request):
     return render(request, "dashboard.html", ctx)
 
 
+def contact_view(request):
+    return render(request, "contact.html")
+
+
+def copyright_view(request):
+    return render(request, "copyright.html")
+
+
+def privacy_view(request):
+    return render(request, "privacy.html")
+
+
+def terms_view(request):
+    return render(request, "terms.html")
+
+
 def signup_view(request):
     if request.user.is_authenticated:
         return redirect("landing")
     form = SignupForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.save()
-        login(request, user)
+        login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         messages.success(request, f"Bem-vindo, {user.first_name}! A sua conta foi criada.")
         return redirect("landing")
     return render(request, "signup.html", {"form": form})
