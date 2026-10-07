@@ -26,6 +26,7 @@
       'landing.footer.copy': '© 2026 Academy. Todos os direitos reservados.',
       // dashboard
       'dash.search.placeholder': 'Pesquisar aulas, produtos digitais, professores',
+      'dash.creativefeed': 'Criar feed',
       'dash.mycourses': 'My Classes',
       'dash.allclasses': 'All Classes',
       'dash.discover': 'Discover',
@@ -113,6 +114,7 @@
       'landing.footer.about': 'About',
       'landing.footer.copy': '© 2026 Academy. All rights reserved.',
       'dash.search.placeholder': 'Search classes, digital products, teachers',
+      'dash.creativefeed': 'Create feed',
       'dash.mycourses': 'My Classes',
       'dash.allclasses': 'All Classes',
       'dash.discover': 'Discover',
